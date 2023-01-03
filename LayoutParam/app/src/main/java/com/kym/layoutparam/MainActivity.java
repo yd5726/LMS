@@ -29,25 +29,17 @@ public class MainActivity extends AppCompatActivity {
         // addView(View child, ViewGroup.LayoutParams params)
         // addView() : ViewGroup 클래스에 정의된 메서드로 부모 뷰그룹에 자식뷰를 추가한다.
         // 첫번째 매개변수로 추가할 자식뷰를, 두번째매개변수로 레이아웃 파라미터 객체를 넣어준다.
-        for (int i = 0;i<linearLayouts.size(); i++) {
-            //linearLayouts.get(i).addView(getTextView());    // 요일
-            for (int j = 0;j< 7; j++) {
-                linearLayouts.get(j).addView(getTextView2());   // test2
+        for (int i = 0;i<3; i++) {
+            for (int j = 0;j<linearLayouts.size(); j++) {
+                linearLayouts.get(j).addView(getTextView());
             }
         }
     }
 
     TextView getTextView(){
         TextView temp_tv = new TextView(this);
-        temp_tv.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT , ViewGroup.LayoutParams.WRAP_CONTENT));
-        temp_tv.setText("요일");
-        return temp_tv;
-    }
-
-    TextView getTextView2(){
-        TextView temp_tv = new TextView(this);
-        temp_tv.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT , ViewGroup.LayoutParams.WRAP_CONTENT));
-        temp_tv.setText("test2");
+        temp_tv.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        temp_tv.setText("영어");
         return temp_tv;
     }
 }
