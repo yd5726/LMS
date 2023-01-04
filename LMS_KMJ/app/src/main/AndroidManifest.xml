@@ -40,7 +40,9 @@
     </queries>
     <!--앱 이름 : android:label-->
     <!--앱 아이콘 : android:icon, android:roundIcon-->
+    <!--통신을 위해 추가 _ android:usesCleartextTraffic="true"-->
     <application
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
