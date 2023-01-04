@@ -1,11 +1,13 @@
 package com.example.lms_kmj;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -57,5 +59,18 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }//onCreate()
+
+    // 앱 종료 : 뒤로가기 버튼 연속 2번 누르면
+    long pressedTime = 0;
+    @Override
+    public void onBackPressed() {
+        if(System.currentTimeMillis() > pressedTime + 2000){
+            pressedTime = System.currentTimeMillis();
+            Toast.makeText(getApplicationContext(), "'뒤로'한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+        }else{
+            ActivityCompat.finishAffinity(this);
+            System.exit(0);
+        }
     }
 }
