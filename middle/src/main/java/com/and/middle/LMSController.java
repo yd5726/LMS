@@ -3,6 +3,8 @@ package com.and.middle;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -69,13 +71,13 @@ public class LMSController {
 		//return member.getId();
 	}
 	
-	@ResponseBody
-	@RequestMapping(value = "/join.mj", produces ="application/json;charset=UTF-8")
-	public void join(String memberVO) {
-		System.out.println(memberVO);
-		MemberVO member = new Gson().fromJson(memberVO, MemberVO.class);
-		session.insert("lms.join",member);
+	@RequestMapping(value = "/join.mj", produces ="text/html;charset=utf-8")
+	public String join(String param) {
+		System.out.println(param);
+		MemberVO vo = new Gson().fromJson(param, MemberVO.class);
+		int result = session.insert("lms.join",vo);
 		
+		return new Gson().toJson(result + "");
 	}
 	/*
 	 * insert into member(member_code,id,pw,member_name,gender
