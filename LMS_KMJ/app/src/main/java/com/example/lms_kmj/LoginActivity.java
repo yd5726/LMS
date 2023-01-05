@@ -12,7 +12,9 @@ import android.widget.Toast;
 
 import com.example.conn.ApiClient;
 import com.example.conn.CommonMethod;
+import com.example.lms_kmj.member.MemberVO;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
 
 public class LoginActivity extends AppCompatActivity {
     TextView join_tv,login_tv,find_tv;
@@ -41,13 +43,19 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void result(boolean isResult, String data) {
                                 Log.d("로그", "result:" + data);
+                                if(data.equals("null")){
+                                    Toast.makeText(LoginActivity.this, "아이디 또는 비밀번호를 확인해주세요!", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    MemberVO account = new Gson().fromJson(data, MemberVO.class);
+                                    LoginInfo.check_id = account.getId();
+                                    intent.putExtra("account", account+"");
+                                    setResult(RESULT_OK, intent);
+                                    startActivity(intent);
+                                    finish();   // finish 하고 다음 화면으로 이동
+                                }
                             }
                         });
-
-                /*
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                 */
             }
         });
 
