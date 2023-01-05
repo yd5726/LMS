@@ -18,12 +18,14 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
             <CalendarView
+                android:id="@+id/calendarView"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/tt_recv_list"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:scrollbarSize="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <include layout="@layout/card_banner"/>
