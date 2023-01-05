@@ -2,6 +2,7 @@ package com.example.lms_kmj;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,9 +41,7 @@ public class MainActivity extends AppCompatActivity {
         top_toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed(); // 앱 종료 됨..
-                //Intent intent = new Intent(MainActivity.this, LoginActivity.class);   // 다시 로그인 화면으로 감.
-                //startActivity(intent);
+                onBackPressed();
             }
         });
 
@@ -55,5 +54,18 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    // 앱 종료 : 뒤로가기 버튼 연속 2번 누르면
+    long pressedTime = 0;
+    @Override
+    public void onBackPressed() {
+        if(System.currentTimeMillis() > pressedTime + 2000){
+            pressedTime = System.currentTimeMillis();
+            Toast.makeText(getApplicationContext(), "'뒤로'한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+        }else{
+            ActivityCompat.finishAffinity(this);
+            System.exit(0);
+        }
     }
 }
