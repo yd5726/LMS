@@ -26,8 +26,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         // IP 설정
         //ApiClient.setBASEURL("http://211.223.59.99/middle/");
-        //ApiClient.setBASEURL("http://192.168.0.8/smart/");
-        ApiClient.setBASEURL("http://192.168.0.122/smart/");
+        ApiClient.setBASEURL("http://192.168.0.19/smart/");   // at_home
+        //ApiClient.setBASEURL("http://192.168.0.122/smart/");    // seat_pick
 
         id_et = findViewById(R.id.id_et);
         pw_et = findViewById(R.id.id_pw);

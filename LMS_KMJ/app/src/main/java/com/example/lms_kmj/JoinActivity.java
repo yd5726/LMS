@@ -41,7 +41,8 @@ public class JoinActivity extends AppCompatActivity {
     RadioGroup radioGroup1,radioGroup2;
     TextView cancel_btn, confirm_btn, id_ck_tv;
     RadioButton stud_rd, teach_rd, male_rd, female_rd;
-    MemberVO memberVO;
+    //MemberVO vo;
+    String type_result, gender_result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +74,7 @@ public class JoinActivity extends AppCompatActivity {
         });
 
         // 회원 가입에 필요한 정보 담을 객체 생성
-        memberVO = new MemberVO();
+        //vo = new MemberVO();
 
         // 학생 or 강사 선택
         radioGroup1 = findViewById(R.id.radioGroup1);
@@ -83,24 +84,26 @@ public class JoinActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if(checkedId == R.id.stud_rd){
-                    memberVO.setType(stud_rd.getText().toString());
+                    type_result = stud_rd.getText().toString();
+                    //vo.setType(stud_rd.getText().toString());
                 }else if(checkedId == R.id.teach_rd){
-                    memberVO.setType(teach_rd.getText().toString());
+                    type_result = teach_rd.getText().toString();
+                    //vo.setType(teach_rd.getText().toString());
                 }
             }
         });
 
         // 아이디 입력
         id_et = findViewById(R.id.id_et);
-        memberVO.setId(id_et.getText().toString());
+        //vo.setId(id_et.getText().toString());
 
         // 비밀번호 입력
         pw_et = findViewById(R.id.pw_et);
-        memberVO.setPw(pw_et.getText().toString());
+        //vo.setPw(pw_et.getText().toString());
 
         // 이름 입력
         name_et = findViewById(R.id.name_et);
-        memberVO.setMember_name(name_et.getText().toString());
+        //vo.setMember_name(name_et.getText().toString());
 
         // 남 or 여 선택
         radioGroup2 = findViewById(R.id.radioGroup2);
@@ -110,16 +113,18 @@ public class JoinActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if(checkedId == R.id.male_rd){
-                    memberVO.setGender(stud_rd.getText().toString());
+                    gender_result = male_rd.getText().toString();
+                    //vo.setGender(stud_rd.getText().toString());
                 }else if(checkedId == R.id.female_rd){
-                    memberVO.setGender(teach_rd.getText().toString());
+                    gender_result = female_rd.getText().toString();
+                    //vo.setGender(teach_rd.getText().toString());
                 }
             }
         });
 
         // 이메일 입력
         email_et = findViewById(R.id.email_et);
-        memberVO.setEmail(email_et.getText().toString());
+        //vo.setEmail(email_et.getText().toString());
 
         // 생년월일 입력
         birth_et = findViewById(R.id.birth_et);
@@ -133,7 +138,7 @@ public class JoinActivity extends AppCompatActivity {
 
         // 전화번호 입력
         phone_et = findViewById(R.id.phone_et);
-        memberVO.setPhone(phone_et.getText().toString());
+        //vo.setPhone(phone_et.getText().toString());
 
         // 취소 버튼
         cancel_btn = findViewById(R.id.cancel_btn);
@@ -150,31 +155,34 @@ public class JoinActivity extends AppCompatActivity {
         confirm_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(memberVO != null) {
-                    new CommonMethod().setParams("memberVO",memberVO)
-                            .sendPost("join.mj", new CommonMethod.CallBackResult() {
-                                @Override
-                                public void result(boolean isResult, String data) {
-                                    Log.d("로그", "result:" + data);
-                                    if(data.equals("null")){
-                                        Toast.makeText(JoinActivity.this, "입력 값을 확인해주세요!", Toast.LENGTH_SHORT).show();
-                                    }else{
-                                        Intent intent = new Intent(JoinActivity.this, MainActivity.class);
-                                        //intent.putExtra();
-                                        //setResult(RESULT_OK, intent);
-                                        startActivity(intent);
-                                        finish();   // finish 하고 다음 화면으로 이동
-                                    }
-                                }
-                            });
+                MemberVO vo = new MemberVO();
+                vo.setType(type_result);
+                vo.setId(id_et.getText()+"");
+                vo.setPw(pw_et.getText()+"");
+                vo.setMember_name(name_et.getText()+"");
+                vo.setGender(gender_result);
+                vo.setEmail(email_et.getText()+"");
+                vo.setPhone(phone_et.getText()+"");
 
-                    Toast.makeText(JoinActivity.this, "회원가입 완료!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(JoinActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                }else{
-                    Toast.makeText(JoinActivity.this, "회원가입 실패!", Toast.LENGTH_SHORT).show();
-                }
+                new CommonMethod().setParams("param",vo)
+                    .sendPost("join.mj", new CommonMethod.CallBackResult() {
+                        @Override
+                        public void result(boolean isResult, String data) {
+                            Log.d("로그", "data:" + data);        // null
+                            Log.d("로그", "isResult:" + isResult);    // true
+                            Log.d("로그", "vo.getId():" + vo.getId());    //aa
+                            /*
+                            if(data.equals("null")){
+                                Toast.makeText(JoinActivity.this, "입력 값을 확인해주세요!", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(JoinActivity.this, "회원가입 완료!", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(JoinActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();   // finish 하고 다음 화면으로 이동
+                            }
+                            */
+                        }
+                    });
             }
         });
 
