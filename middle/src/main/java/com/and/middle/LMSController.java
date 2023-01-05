@@ -1,14 +1,17 @@
 package com.and.middle;
 
 import java.util.HashMap;
+
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
@@ -50,6 +53,7 @@ public class LMSController {
 	}
 	
 	// http://localhost/smart/login1.mj?id=user3&pw=000aA
+	// http://192.168.0.3/smart/login1.mj?id=user3&pw=000aA
 	@RequestMapping(value = "/login1.mj", produces ="text/html;charset=UTF-8")
 	public String login1(String id, String pw) {
 		HashMap<String,String> map = new HashMap<String, String>();
@@ -65,5 +69,6 @@ public class LMSController {
 		}
 		
 		return new Gson().toJson(member);
+		//return member.getId();
 	}
 }
