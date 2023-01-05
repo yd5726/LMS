@@ -1,17 +1,13 @@
 package com.and.middle;
 
 import java.util.HashMap;
-
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
@@ -63,8 +59,7 @@ public class LMSController {
 		map.put("pw", pw);
 		
 		MemberVO member = session.selectOne("lms.login1", map);
-		System.out.println(member.getId());	//user3
-		
+		//System.out.println(member.getId());	//user3
 		if(member != null) {
 			System.out.println("id:" + member.getId());	//id:user3
 			System.out.println("email:" + member.getEmail()); //email:user3@gg.com
@@ -73,4 +68,18 @@ public class LMSController {
 		return new Gson().toJson(member);
 		//return member.getId();
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/join.mj", produces ="application/json;charset=UTF-8")
+	public void join(String memberVO) {
+		System.out.println(memberVO);
+		MemberVO member = new Gson().fromJson(memberVO, MemberVO.class);
+		session.insert("lms.join",member);
+		
+	}
+	/*
+	 * insert into member(member_code,id,pw,member_name,gender
+	 * ,email,birth,phone,type) values(SEQ_MEMBER.nextval,'minju','1234A','kmj','여'
+	 * ,'yd5726@naver.com','97/11/13','010.9797.1234','TEACH');
+	 */
 }
