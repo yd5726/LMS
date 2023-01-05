@@ -26,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         // IP 설정
         //ApiClient.setBASEURL("http://211.223.59.99/middle/");
         ApiClient.setBASEURL("http://192.168.0.19/smart/");   // at_home
@@ -33,9 +34,11 @@ public class LoginActivity extends AppCompatActivity {
 
         id_et = findViewById(R.id.id_et);
         pw_et = findViewById(R.id.id_pw);
+        login_tv = findViewById(R.id.login_tv);
+        join_tv = findViewById(R.id.join_tv);
+        find_tv = findViewById(R.id.find_tv);
 
         // 로그인 버튼
-        login_tv = findViewById(R.id.login_tv);
         login_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +71,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // 회원가입 버튼
-        join_tv = findViewById(R.id.join_tv);
         join_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +80,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // 비밀번호 찾기 버튼
-        find_tv = findViewById(R.id.find_tv);
         find_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

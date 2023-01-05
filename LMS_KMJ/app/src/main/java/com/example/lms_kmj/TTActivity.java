@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CalendarView;
 
+import com.example.lms_kmj.drawer.DrawerActivity;
 import com.example.lms_kmj.tt_recv.TT_DTO;
 import com.example.lms_kmj.tt_recv.TTAdapter;
 
@@ -35,11 +36,9 @@ public class TTActivity extends AppCompatActivity {
         top_toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch(item.getItemId()){
-                    case R.id.top_toolbar_more:
-                        Intent intent = new Intent(TTActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        break;
+                if (item.getItemId() == R.id.top_toolbar_more) {
+                    Intent intent = new Intent(TTActivity.this, DrawerActivity.class);
+                    startActivity(intent);
                 }
                 return true;
             }

@@ -4,12 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.example.lms_kmj.drawer.DrawerActivity;
 
 public class MainActivity extends AppCompatActivity {
     Toolbar top_toolbar;
@@ -26,12 +29,9 @@ public class MainActivity extends AppCompatActivity {
         top_toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch(item.getItemId()){
-                    case R.id.top_toolbar_more:
-                        //Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                        Intent intent = new Intent(MainActivity.this, MenuMoveActivity.class);
-                        startActivity(intent);
-                        break;
+                if (item.getItemId() == R.id.top_toolbar_more) {
+                    Intent intent = new Intent(MainActivity.this, DrawerActivity.class);
+                    startActivity(intent);
                 }
                 return true;
             }

@@ -20,18 +20,6 @@ public class FindActivity extends AppCompatActivity {
         // 상단바
         top_toolbar = findViewById(R.id.top_toolbar);
         top_toolbar.setTitle("");
-        top_toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch(item.getItemId()){
-                    case R.id.top_toolbar_more:
-                        Intent intent = new Intent(FindActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        break;
-                }
-                return true;
-            }
-        });
 
         // 상단바 뒤로가기 버튼
         top_toolbar.setNavigationOnClickListener(new View.OnClickListener() {
