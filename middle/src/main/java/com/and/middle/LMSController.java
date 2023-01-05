@@ -53,7 +53,7 @@ public class LMSController {
 	}
 	
 	// http://localhost/smart/login1.mj?id=user3&pw=000aA
-	// http://192.168.0.3/smart/login1.mj?id=user3&pw=000aA
+	// WiFi : hanul202 _ http://192.168.0.8/smart/login1.mj?id=user3&pw=000aA
 	@RequestMapping(value = "/login1.mj", produces ="text/html;charset=UTF-8")
 	public String login1(String id, String pw) {
 		HashMap<String,String> map = new HashMap<String, String>();
