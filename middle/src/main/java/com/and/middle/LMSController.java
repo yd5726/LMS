@@ -54,6 +54,8 @@ public class LMSController {
 	
 	// http://localhost/smart/login1.mj?id=user3&pw=000aA
 	// WiFi : hanul202 _ http://192.168.0.8/smart/login1.mj?id=user3&pw=000aA
+	// Spring을 연 곳이 서버 _ 202호 컴퓨터 _ 192.168.0.122로 안드로이드 ip 설정
+	// http://192.168.0.122/smart/login1.mj?id=user3&pw=000aA
 	@RequestMapping(value = "/login1.mj", produces ="text/html;charset=UTF-8")
 	public String login1(String id, String pw) {
 		HashMap<String,String> map = new HashMap<String, String>();
