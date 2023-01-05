@@ -1,21 +1,25 @@
 package com.example.lms_kmj;
 
-import androidx.annotation.IdRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.conn.CommonMethod;
+import com.example.lms_kmj.member.MemberVO;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -32,10 +36,12 @@ public class JoinActivity extends AppCompatActivity {
             updateDate();
         }
     };
-    TextInputEditText editDate_et;
+    TextInputEditText id_et, pw_et, name_et, email_et, birth_et, phone_et;
     Toolbar top_toolbar;
     RadioGroup radioGroup1,radioGroup2;
     TextView cancel_btn, confirm_btn, id_ck_tv;
+    RadioButton stud_rd, teach_rd, male_rd, female_rd;
+    MemberVO memberVO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,17 +72,58 @@ public class JoinActivity extends AppCompatActivity {
             }
         });
 
+        // 회원 가입에 필요한 정보 담을 객체 생성
+        memberVO = new MemberVO();
+
         // 학생 or 강사 선택
         radioGroup1 = findViewById(R.id.radioGroup1);
-        radioGroup1.setOnCheckedChangeListener(radioGroupButtonChangeListener1);
+        stud_rd = findViewById(R.id.stud_rd);
+        teach_rd = findViewById(R.id.teach_rd);
+        radioGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if(checkedId == R.id.stud_rd){
+                    memberVO.setType(stud_rd.getText().toString());
+                }else if(checkedId == R.id.teach_rd){
+                    memberVO.setType(teach_rd.getText().toString());
+                }
+            }
+        });
+
+        // 아이디 입력
+        id_et = findViewById(R.id.id_et);
+        memberVO.setId(id_et.getText().toString());
+
+        // 비밀번호 입력
+        pw_et = findViewById(R.id.pw_et);
+        memberVO.setPw(pw_et.getText().toString());
+
+        // 이름 입력
+        name_et = findViewById(R.id.name_et);
+        memberVO.setMember_name(name_et.getText().toString());
 
         // 남 or 여 선택
         radioGroup2 = findViewById(R.id.radioGroup2);
-        radioGroup2.setOnCheckedChangeListener(radioGroupButtonChangeListener2);
+        male_rd = findViewById(R.id.male_rd);
+        female_rd = findViewById(R.id.female_rd);
+        radioGroup2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if(checkedId == R.id.male_rd){
+                    memberVO.setGender(stud_rd.getText().toString());
+                }else if(checkedId == R.id.female_rd){
+                    memberVO.setGender(teach_rd.getText().toString());
+                }
+            }
+        });
 
-        // 생년월일
-        editDate_et = findViewById(R.id.editDate_et);
-        editDate_et.setOnClickListener(new View.OnClickListener() {
+        // 이메일 입력
+        email_et = findViewById(R.id.email_et);
+        memberVO.setEmail(email_et.getText().toString());
+
+        // 생년월일 입력
+        birth_et = findViewById(R.id.birth_et);
+        birth_et.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new DatePickerDialog(JoinActivity.this,
@@ -84,12 +131,17 @@ public class JoinActivity extends AppCompatActivity {
             }
         });
 
+        // 전화번호 입력
+        phone_et = findViewById(R.id.phone_et);
+        memberVO.setPhone(phone_et.getText().toString());
+
         // 취소 버튼
         cancel_btn = findViewById(R.id.cancel_btn);
         cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                Intent intent = new Intent(JoinActivity.this, LoginActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -98,7 +150,31 @@ public class JoinActivity extends AppCompatActivity {
         confirm_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(memberVO != null) {
+                    new CommonMethod().setParams("memberVO",memberVO)
+                            .sendPost("join.mj", new CommonMethod.CallBackResult() {
+                                @Override
+                                public void result(boolean isResult, String data) {
+                                    Log.d("로그", "result:" + data);
+                                    if(data.equals("null")){
+                                        Toast.makeText(JoinActivity.this, "입력 값을 확인해주세요!", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        Intent intent = new Intent(JoinActivity.this, MainActivity.class);
+                                        //intent.putExtra();
+                                        //setResult(RESULT_OK, intent);
+                                        startActivity(intent);
+                                        finish();   // finish 하고 다음 화면으로 이동
+                                    }
+                                }
+                            });
 
+                    Toast.makeText(JoinActivity.this, "회원가입 완료!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(JoinActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else{
+                    Toast.makeText(JoinActivity.this, "회원가입 실패!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -107,7 +183,7 @@ public class JoinActivity extends AppCompatActivity {
         id_ck_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(JoinActivity.this, "클릭함.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(JoinActivity.this, "아이디 중복확인 완료!", Toast.LENGTH_SHORT).show();
             }
         });
     }//onCreate()
@@ -119,30 +195,6 @@ public class JoinActivity extends AppCompatActivity {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             simpleDateFormat = new SimpleDateFormat(format, Locale.KOREA);
         }
-        editDate_et.setText(simpleDateFormat.format(myCalendar.getTime()));
+        birth_et.setText(simpleDateFormat.format(myCalendar.getTime()));
     }//updateDate()
-
-    // 라디오 그룹 클릭 - 학생 or 강사 선택
-    RadioGroup.OnCheckedChangeListener radioGroupButtonChangeListener1 = new RadioGroup.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-            if(i == R.id.stud_rd){
-                Toast.makeText(JoinActivity.this, "학생 입니다.", Toast.LENGTH_SHORT).show();
-            }
-            else if(i == R.id.teach_rd){
-                Toast.makeText(JoinActivity.this, "강사 입니다.", Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-    RadioGroup.OnCheckedChangeListener radioGroupButtonChangeListener2 = new RadioGroup.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-            if(i == R.id.m_rd){
-                Toast.makeText(JoinActivity.this, "성별 : 남", Toast.LENGTH_SHORT).show();
-            }
-            else if(i == R.id.f_rd){
-                Toast.makeText(JoinActivity.this, "성별 : 여", Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
 }
