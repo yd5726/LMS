@@ -1,40 +1,32 @@
 package lms_member;
 
-public class MemberVO {
-	private String member_code, id, pw, member_name, gender
+public class TESTMemberVO {
+	private String userid, userpw, name, gender
 			, email, birth, phone, post, address
-			, type, profilepath, salt;
+			, admin, social, profile, salt;
 
-	public String getMember_code() {
-		return member_code;
+	public String getUserid() {
+		return userid;
 	}
 
-	public void setMember_code(String member_code) {
-		this.member_code = member_code;
+	public void setUserid(String userid) {
+		this.userid = userid;
 	}
 
-	public String getId() {
-		return id;
+	public String getUserpw() {
+		return userpw;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setUserpw(String userpw) {
+		this.userpw = userpw;
 	}
 
-	public String getPw() {
-		return pw;
+	public String getName() {
+		return name;
 	}
 
-	public void setPw(String pw) {
-		this.pw = pw;
-	}
-
-	public String getMember_name() {
-		return member_name;
-	}
-
-	public void setMember_name(String member_name) {
-		this.member_name = member_name;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getGender() {
@@ -85,20 +77,28 @@ public class MemberVO {
 		this.address = address;
 	}
 
-	public String getType() {
-		return type;
+	public String getAdmin() {
+		return admin;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setAdmin(String admin) {
+		this.admin = admin;
 	}
 
-	public String getProfilepath() {
-		return profilepath;
+	public String getSocial() {
+		return social;
 	}
 
-	public void setProfilepath(String profilepath) {
-		this.profilepath = profilepath;
+	public void setSocial(String social) {
+		this.social = social;
+	}
+
+	public String getProfile() {
+		return profile;
+	}
+
+	public void setProfile(String profile) {
+		this.profile = profile;
 	}
 
 	public String getSalt() {
