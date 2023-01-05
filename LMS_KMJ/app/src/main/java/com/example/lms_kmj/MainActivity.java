@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     Toolbar top_toolbar;
@@ -39,7 +40,9 @@ public class MainActivity extends AppCompatActivity {
         top_toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                onBackPressed(); // 앱 종료 됨..
+                //Intent intent = new Intent(MainActivity.this, LoginActivity.class);   // 다시 로그인 화면으로 감.
+                //startActivity(intent);
             }
         });
 

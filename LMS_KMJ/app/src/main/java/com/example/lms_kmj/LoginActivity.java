@@ -4,12 +4,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class LoginActivity extends AppCompatActivity {
     TextView join_tv,login_tv,find_tv;
@@ -22,7 +32,6 @@ public class LoginActivity extends AppCompatActivity {
 
         // IP 설정
         //ApiClient.setBASEURL("http://192.168.0.122:8080/middle/");
-        //ApiClient.setBASEURL("http://localhost:80/middle/");
 
         id_et = findViewById(R.id.id_et);
         pw_et = findViewById(R.id.id_pw);

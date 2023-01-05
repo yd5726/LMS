@@ -2,15 +2,21 @@ package com.example.lms_kmj;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.lms_kmj.tt_recv.TTAdapter;
+
 public class TTActivity extends AppCompatActivity {
     Toolbar top_toolbar;
+    RecyclerView tt_recv_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +31,7 @@ public class TTActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch(item.getItemId()){
                     case R.id.top_toolbar_more:
-                        Intent intent = new Intent(TTActivity.this, LoginActivity.class);
+                        Intent intent = new Intent(TTActivity.this, MainActivity.class);
                         startActivity(intent);
                         break;
                 }
@@ -40,6 +46,12 @@ public class TTActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-    }
+
+        // 일정들
+        tt_recv_list = findViewById(R.id.tt_recv_list);
+        tt_recv_list.setAdapter(new TTAdapter(getLayoutInflater()));
+        tt_recv_list.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
+
+    }//onCreate()
 
 }
