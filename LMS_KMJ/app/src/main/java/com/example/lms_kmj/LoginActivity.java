@@ -4,22 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.conn.ApiClient;
+import com.example.conn.CommonMethod;
 import com.google.android.material.textfield.TextInputEditText;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class LoginActivity extends AppCompatActivity {
     TextView join_tv,login_tv,find_tv;
@@ -30,7 +23,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // IP 설정
-        //ApiClient.setBASEURL("http://211.223.59.99:80/middle/");
+        //ApiClient.setBASEURL("http://211.223.59.99/middle/");
+        //ApiClient.setBASEURL("http://192.168.0.8/smart/");
+        ApiClient.setBASEURL("http://192.168.0.122/smart/");
 
         id_et = findViewById(R.id.id_et);
         pw_et = findViewById(R.id.id_pw);
@@ -40,15 +35,19 @@ public class LoginActivity extends AppCompatActivity {
         login_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 아이디와 비밀번호 길이가 0이 아니면
+                new CommonMethod().setParams("id", id_et.getText().toString())
+                        .setParams("pw", pw_et.getText().toString())
+                        .sendPost("login1.mj", new CommonMethod.CallBackResult() {
+                            @Override
+                            public void result(boolean isResult, String data) {
+                                Log.d("로그", "result:" + data);
+                            }
+                        });
+
                 /*
-                if(id_et.getText().toString().length() != 0 && pw_et.getText().toString().length() != 0){
-                    String id = id_et.getText().toString();
-                    String pw = pw_et.getText().toString();
-                }
-                */
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
+                 */
             }
         });
 
