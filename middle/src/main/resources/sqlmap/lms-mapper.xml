@@ -19,8 +19,8 @@ where id = #{id} and pw = #{pw}
 <insert id='join'>
 insert into member(member_code,id,pw,member_name,gender
 ,email,birth,phone,type)
-values ( SEQ_MEMBER.nextval,#{id},#{pw},#{member_name}
-,#{gender},#{email},#{type})	
+values ( SEQ_MEMBER.nextval,#{id},#{pw},#{member_name},#{gender}
+,#{email},#{birth},#{phone},#{type})	
 </insert>
 
 

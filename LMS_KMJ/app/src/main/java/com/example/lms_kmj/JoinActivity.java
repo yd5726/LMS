@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.RadioButton;
@@ -40,7 +39,7 @@ public class JoinActivity extends AppCompatActivity {
     RadioGroup radioGroup1,radioGroup2;
     TextView cancel_btn, confirm_btn, id_ck_tv;
     RadioButton stud_rd, teach_rd, male_rd, female_rd;
-    String type_result, gender_result;
+    String type_result ="STUD", gender_result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,25 +126,21 @@ public class JoinActivity extends AppCompatActivity {
                 vo.setMember_name(name_et.getText()+"");
                 vo.setGender(gender_result);
                 vo.setEmail(email_et.getText()+"");
+                vo.setBirth(birth_et.getText()+"");
                 vo.setPhone(phone_et.getText()+"");
-
-                new CommonMethod().setParams("param",vo)
-                    .sendPost("join.mj", new CommonMethod.CallBackResult() {
+                new CommonMethod().setParams("param", vo).setParams("member", new Gson().toJson(vo)).
+                        sendPost("join.mj", new CommonMethod.CallBackResult() {
                         @Override
                         public void result(boolean isResult, String data) {
-                            Log.d("로그", "data:" + data);        // null
-                            Log.d("로그", "isResult:" + isResult);    // true
-                            Log.d("로그", "vo.getId():" + vo.getId());    //aa
-                            /*
-                            if(data.equals("null")){
+                            if(data ==null || data.equals("null")){
+                                // 값을 몇 개만 넣으면, 앱 die
                                 Toast.makeText(JoinActivity.this, "입력 값을 확인해주세요!", Toast.LENGTH_SHORT).show();
                             }else{
                                 Toast.makeText(JoinActivity.this, "회원가입 완료!", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(JoinActivity.this, MainActivity.class);
                                 startActivity(intent);
-                                finish();   // finish 하고 다음 화면으로 이동
+                                finish();
                             }
-                            */
                         }
                     });
             }
@@ -163,7 +158,7 @@ public class JoinActivity extends AppCompatActivity {
 
     // 날짜 형식 변환
     public void updateDate(){
-        String format = "YYYY/MM/dd";
+        String format = "YY/MM/dd";
         SimpleDateFormat simpleDateFormat = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             simpleDateFormat = new SimpleDateFormat(format, Locale.KOREA);

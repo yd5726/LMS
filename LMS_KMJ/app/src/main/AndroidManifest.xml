@@ -54,7 +54,21 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".drawer.DrawerActivity"
+            android:name=".drawer.AcInfoActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".drawer.AcCalendarActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".drawer.MyInfoActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

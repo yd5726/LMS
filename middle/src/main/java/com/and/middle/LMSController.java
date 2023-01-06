@@ -9,10 +9,10 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import lms_member.MemberVO;
 import lms_member.TESTMemberVO;
@@ -72,10 +72,30 @@ public class LMSController {
 	}
 	
 	@RequestMapping(value = "/join.mj", produces ="text/html;charset=utf-8")
-	public String join(String param) {
-		System.out.println(param);
-		MemberVO vo = new Gson().fromJson(param, MemberVO.class);
+	//public String join(MemberVO param) {
+	public String join( String member, HttpServletRequest request) {
+		MemberVO vo = new Gson().fromJson(member, MemberVO.class);
+		
+	//	HashMap<String,Object> v1 = new Gson().fromJson( request.getParameter("map"),  new TypeToken<HashMap<String,Object>>(){}.getType());
 		int result = session.insert("lms.join",vo);
+		
+		//MemberVO v2 = new Gson().fromJson( request.getParameter("vo"),  new TypeToken<MemberVO>(){}.getType());
+
+		
+		//		System.out.println(param);
+		//MemberVO vo = new Gson().fromJson(param, MemberVO.class);
+		//MemberVO vo = new MemberVO(); 
+		//vo.setId("id1");
+		//vo.setPw("pw2");
+		//vo.setMember_name("new_join123");
+		//vo.setGender("여");
+		//vo.setEmail("email@naver.com");
+		//vo.setBirth("97/11/13");
+		//vo.setPhone("01048483212");
+		//vo.setType("TEACH");
+
+//		int result = session.insert("lms.join",vo);
+//		int result = session.insert("lms.join",param);
 		
 		return new Gson().toJson(result + "");
 	}

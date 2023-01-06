@@ -16,10 +16,6 @@ public class TTAdapter extends RecyclerView.Adapter<TTAdapter.ViewHolder>{
     LayoutInflater inflater;
     ArrayList<TT_DTO> list;
 
-    public TTAdapter(LayoutInflater inflater) {
-        this.inflater = inflater;
-    }
-
     public TTAdapter(LayoutInflater inflater, ArrayList<TT_DTO> list) {
         this.inflater = inflater;
         this.list = list;
@@ -36,17 +32,6 @@ public class TTAdapter extends RecyclerView.Adapter<TTAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        /*
-        holder.tt_recv_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        holder.tt_recv_date.setText("-월 -일 (-)");
-        holder.tt_recv_time.setText("-:-- ~ -:--");
-        holder.tt_recv_content.setText("쉽니다-- -- --");
-        */
         for(int i=0; i<list.size(); i++) {
             TT_DTO tt_dto = list.get(i);
             String date = tt_dto.getDate();
@@ -60,8 +45,6 @@ public class TTAdapter extends RecyclerView.Adapter<TTAdapter.ViewHolder>{
 
     @Override
     public int getItemCount() {
-        //return 15;
-        //return list.size();
         return (null != list ? list.size() : 0);
     }
 

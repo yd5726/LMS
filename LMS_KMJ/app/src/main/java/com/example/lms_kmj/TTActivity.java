@@ -9,11 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.CalendarView;
 
-import com.example.lms_kmj.drawer.DrawerActivity;
 import com.example.lms_kmj.tt_recv.TT_DTO;
 import com.example.lms_kmj.tt_recv.TTAdapter;
 
@@ -33,6 +31,7 @@ public class TTActivity extends AppCompatActivity {
         // 상단바
         top_toolbar = findViewById(R.id.top_toolbar);
         top_toolbar.setTitle("시간표");
+        /*
         top_toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -42,7 +41,7 @@ public class TTActivity extends AppCompatActivity {
                 }
                 return true;
             }
-        });
+        });*/
 
         // 상단바 뒤로가기 버튼
         top_toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -67,7 +66,6 @@ public class TTActivity extends AppCompatActivity {
         tt_recv_list = findViewById(R.id.tt_recv_list);
         list = new ArrayList<>();
         list.add(new TT_DTO("1월 6일","3:00 ~ 5:02","일정 회의가 있습니다."));
-        //tt_recv_list.setAdapter(new TTAdapter(getLayoutInflater()));
         tt_recv_list.setAdapter(new TTAdapter(getLayoutInflater(), list));
         tt_recv_list.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
 

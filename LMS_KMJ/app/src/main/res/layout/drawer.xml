@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawerView"
+    android:layout_gravity="end"
+    android:background="#548195"
+    android:orientation="vertical"
+    android:layout_width="280dp"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <ImageView
+                android:layout_marginTop="40dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_launcher_foreground"
+                android:layout_width="100dp"
+                android:layout_height="100dp"/>
+            <TextView
+                style="@style/TEXT_STYLE_3"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="center"
+                android:text="네모 - 로그인 중"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="3"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <View
+                android:layout_marginBottom="20dp"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/myInfo_tv"
+                    style="@style/TEXT_STYLE_4"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:text="내 정보"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/acCalendar_tv"
+                    style="@style/TEXT_STYLE_4"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:text="학원 일정"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/acInfo_tv"
+                    style="@style/TEXT_STYLE_4"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:text="학원 소개"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/logout_tv"
+                    style="@style/TEXT_STYLE_4"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:text="로그아웃"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

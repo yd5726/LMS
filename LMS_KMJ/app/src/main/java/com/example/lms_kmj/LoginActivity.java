@@ -28,9 +28,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         // IP 설정
-        //ApiClient.setBASEURL("http://211.223.59.99/middle/");
-        ApiClient.setBASEURL("http://192.168.0.19/smart/");   // at_home
-        //ApiClient.setBASEURL("http://192.168.0.122/smart/");    // seat_pick
+        //ApiClient.setBASEURL("http://192.168.0.19/smart/");   // at_home
+        ApiClient.setBASEURL("http://192.168.0.122/smart/");    // seat_pick
 
         id_et = findViewById(R.id.id_et);
         pw_et = findViewById(R.id.id_pw);
@@ -42,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         login_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
+
                 new CommonMethod().setParams("id", id_et.getText().toString())
                         .setParams("pw", pw_et.getText().toString())
                         .sendPost("login1.mj", new CommonMethod.CallBackResult() {
@@ -62,11 +61,12 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             }
                         });
-                */
-                // 시간표 테스트 중
+
+                /*
+                // 로그인 없이 테스트 하려면
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
-                finish();
+                finish();*/
             }
         });
 
