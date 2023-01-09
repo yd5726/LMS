@@ -1,6 +1,8 @@
 package com.and.middle;
 
 import java.util.HashMap;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ibatis.session.SqlSession;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 
+import lms_lecture.LectureVO;
 import lms_member.MemberVO;
 
 @RestController
@@ -25,7 +28,7 @@ public class LMSController {
 		map.put("id", id);
 		map.put("pw", pw);
 		
-		MemberVO member = session.selectOne("lms.login", map);
+		MemberVO member = session.selectOne("member.login", map);
 		if(member != null) {
 			System.out.println("==로그인 성공==");
 			System.out.println("id:" + member.getId());
@@ -41,7 +44,7 @@ public class LMSController {
 	@RequestMapping(value = "/join.mj", produces ="text/html;charset=utf-8")
 	public String join(String member, HttpServletRequest request) {
 		MemberVO vo = new Gson().fromJson(member, MemberVO.class);
-		int result = session.insert("lms.join",vo);
+		int result = session.insert("member.join",vo);
 		if(vo != null) {
 			System.out.println("==회원가입 성공==");
 			System.out.println("id:" + vo.getId());
@@ -54,4 +57,10 @@ public class LMSController {
 		return new Gson().toJson(result + "");
 	}
 	
+	@RequestMapping(value = "/ttlist.mj", produces ="text/html;charset=utf-8")
+	public String ttlist(int teacher_code) {
+		List<LectureVO> ttlist = session.selectList("lecture.list",teacher_code);
+		
+		return new Gson().toJson(ttlist);
+	}
 }
