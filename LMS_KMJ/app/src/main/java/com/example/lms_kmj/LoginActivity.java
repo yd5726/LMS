@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.conn.ApiClient;
 import com.example.conn.CommonMethod;
+import com.example.lms_kmj.common.Common;
 import com.example.lms_kmj.member.MemberVO;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
@@ -51,7 +52,9 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.makeText(LoginActivity.this, "아이디 또는 비밀번호를 확인해주세요!", Toast.LENGTH_SHORT).show();
                                 }else{
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    Common common = new Common();
                                     MemberVO account = new Gson().fromJson(data, MemberVO.class);
+                                    common.setLoginInfo(account); // 임시로그인
                                     LoginInfo.check_id = account.getId();
                                     intent.putExtra("account", account+"");
                                     setResult(RESULT_OK, intent);

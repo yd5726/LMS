@@ -133,7 +133,6 @@ public class JoinActivity extends AppCompatActivity {
                         @Override
                         public void result(boolean isResult, String data) {
                             if(data ==null || data.equals("null")){
-                                // 값을 몇 개만 넣으면, 앱 die
                                 Toast.makeText(JoinActivity.this, "입력 값을 확인해주세요!", Toast.LENGTH_SHORT).show();
                             }else{
                                 Toast.makeText(JoinActivity.this, "회원가입 완료!", Toast.LENGTH_SHORT).show();

@@ -1,27 +1,30 @@
 package com.example.lms_kmj;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.CalendarView;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import com.example.lms_kmj.tt_recv.TT_DTO;
-import com.example.lms_kmj.tt_recv.TTAdapter;
+import com.example.conn.CommonMethod;
+import com.example.lms_kmj.common.Common;
+import com.example.lms_kmj.lecture.LectureVO;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class TTActivity extends AppCompatActivity {
     Toolbar top_toolbar;
-    RecyclerView tt_recv_list;
-    CalendarView calendarView;
-    ArrayList<TT_DTO> list;
+    ArrayList<LinearLayout> linearLayouts = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,18 +33,15 @@ public class TTActivity extends AppCompatActivity {
 
         // 상단바
         top_toolbar = findViewById(R.id.top_toolbar);
-        top_toolbar.setTitle("시간표");
-        /*
-        top_toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.top_toolbar_more) {
-                    Intent intent = new Intent(TTActivity.this, DrawerActivity.class);
-                    startActivity(intent);
-                }
-                return true;
-            }
-        });*/
+        linearLayouts.add(findViewById(R.id.ln_layout1));
+        linearLayouts.add(findViewById(R.id.ln_layout2));
+        linearLayouts.add(findViewById(R.id.ln_layout3));
+        linearLayouts.add(findViewById(R.id.ln_layout4));
+        linearLayouts.add(findViewById(R.id.ln_layout5));
+        linearLayouts.add(findViewById(R.id.ln_layout6));
+        linearLayouts.add(findViewById(R.id.ln_layout7));
+
+        top_toolbar.setTitle(LoginInfo.check_id+"의 시간표");
 
         // 상단바 뒤로가기 버튼
         top_toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -51,24 +51,49 @@ public class TTActivity extends AppCompatActivity {
             }
         });
 
-        // 캘린더
-        calendarView = findViewById(R.id.calendarView);
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        Common common = new Common();
+
+        top_toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                Log.d("로그", "year: " + year);
-                Log.d("로그", "month: " + (month+1));
-                Log.d("로그", "dayOfMonth: " + dayOfMonth);
+            public boolean onMenuItemClick(MenuItem item) {
+                if(item.getItemId() == R.id.top_toolbar_more) {
+                    new CommonMethod().setParams("teacher_code",common.getLoginInfo().getMember_code())
+                            .sendPost("ttlist.mj", new CommonMethod.CallBackResult() {
+                                @Override
+                                public void result(boolean isResult, String data) {
+                                    ArrayList<LectureVO> list = new Gson().fromJson(data , new TypeToken<ArrayList<LectureVO>>(){}.getType());
+                                    for (int i = 0 ; i < list.size() ; i++){
+                                        int index = 0 ;
+                                        if(list.get(i).getvDay().equals("월")){
+                                            index= 1;
+                                        }else if(list.get(i).getvDay().equals("화")){
+                                            index= 2;
+                                        }else if(list.get(i).getvDay().equals("수")){
+                                            index= 3;
+                                        }else if(list.get(i).getvDay().equals("목")){
+                                            index= 4;
+                                        }else if(list.get(i).getvDay().equals("금")){
+                                            index= 5;
+                                        }else{
+                                            index= 6;  // 여기 타면 오류임
+                                        }
+                                        linearLayouts.get(index).addView(
+                                                getTextView(list.get(i).getLecture_name()+list.get(i).getTimetable_code())
+                                        );
+                                    }
+                                }
+                            });
+                    return true;
+                }
+                return false;
             }
         });
+    }//onCreate()       // id: teacher1  , pw: 000aA
 
-        // 일정들
-        tt_recv_list = findViewById(R.id.tt_recv_list);
-        list = new ArrayList<>();
-        list.add(new TT_DTO("1월 6일","3:00 ~ 5:02","일정 회의가 있습니다."));
-        tt_recv_list.setAdapter(new TTAdapter(getLayoutInflater(), list));
-        tt_recv_list.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
-
-    }//onCreate()
-
+    TextView getTextView(String data){
+        TextView temp_tv = new TextView(this);
+        temp_tv.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        temp_tv.setText(data);
+        return temp_tv;
+    }//getTextView()
 }
