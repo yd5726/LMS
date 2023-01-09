@@ -41,10 +41,9 @@ public class LoginActivity extends AppCompatActivity {
         login_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 new CommonMethod().setParams("id", id_et.getText().toString())
                         .setParams("pw", pw_et.getText().toString())
-                        .sendPost("login1.mj", new CommonMethod.CallBackResult() {
+                        .sendPost("login.mj", new CommonMethod.CallBackResult() {
                             @Override
                             public void result(boolean isResult, String data) {
                                 Log.d("로그", "result:" + data);
