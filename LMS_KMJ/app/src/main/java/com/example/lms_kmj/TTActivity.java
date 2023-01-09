@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class TTActivity extends AppCompatActivity {
-    Toolbar top_toolbar;
+    Toolbar tt_toolbar;
     ArrayList<LinearLayout> linearLayouts = new ArrayList<>();
 
     @Override
@@ -32,19 +32,17 @@ public class TTActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tt);
 
         // 상단바
-        top_toolbar = findViewById(R.id.top_toolbar);
+        tt_toolbar = findViewById(R.id.tt_toolbar);
         linearLayouts.add(findViewById(R.id.ln_layout1));
         linearLayouts.add(findViewById(R.id.ln_layout2));
         linearLayouts.add(findViewById(R.id.ln_layout3));
         linearLayouts.add(findViewById(R.id.ln_layout4));
         linearLayouts.add(findViewById(R.id.ln_layout5));
-        linearLayouts.add(findViewById(R.id.ln_layout6));
-        linearLayouts.add(findViewById(R.id.ln_layout7));
 
-        top_toolbar.setTitle(LoginInfo.check_id+"의 시간표");
+        tt_toolbar.setTitle(LoginInfo.check_id+"의 시간표");
 
         // 상단바 뒤로가기 버튼
-        top_toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        tt_toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
@@ -53,10 +51,10 @@ public class TTActivity extends AppCompatActivity {
 
         Common common = new Common();
 
-        top_toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        tt_toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if(item.getItemId() == R.id.top_toolbar_more) {
+                if(item.getItemId() == R.id.tt_toolbar_reloading) {
                     new CommonMethod().setParams("teacher_code",common.getLoginInfo().getMember_code())
                             .sendPost("ttlist.mj", new CommonMethod.CallBackResult() {
                                 @Override
@@ -65,20 +63,20 @@ public class TTActivity extends AppCompatActivity {
                                     for (int i = 0 ; i < list.size() ; i++){
                                         int index = 0 ;
                                         if(list.get(i).getvDay().equals("월")){
-                                            index= 1;
+                                            index= 0;
                                         }else if(list.get(i).getvDay().equals("화")){
-                                            index= 2;
+                                            index= 1;
                                         }else if(list.get(i).getvDay().equals("수")){
-                                            index= 3;
+                                            index= 2;
                                         }else if(list.get(i).getvDay().equals("목")){
-                                            index= 4;
+                                            index= 3;
                                         }else if(list.get(i).getvDay().equals("금")){
-                                            index= 5;
+                                            index= 4;
                                         }else{
-                                            index= 6;  // 여기 타면 오류임
+                                            index= list.size()+1;  // 여기 타면 오류
                                         }
                                         linearLayouts.get(index).addView(
-                                                getTextView(list.get(i).getLecture_name()+list.get(i).getTimetable_code())
+                                                getTextView(list.get(i).getTimetable_code()+"교시\n"+list.get(i).getLecture_name())
                                         );
                                     }
                                 }

@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".TTActivity">
     <!--상단바-->
-    <include layout="@layout/top_toolbar"/>
+    <include layout="@layout/tt_toolbar"/>
     <TableLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -15,12 +15,6 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <TextView
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="일"
-                android:layout_width="0dp"
-                android:layout_height="50dp"/>
             <TextView
                 android:layout_weight="1"
                 android:gravity="center"
@@ -49,12 +43,6 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="금"
-                android:layout_width="0dp"
-                android:layout_height="50dp"/>
-            <TextView
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="토"
                 android:layout_width="0dp"
                 android:layout_height="50dp"/>
         </TableRow>
@@ -92,19 +80,6 @@
             android:orientation="vertical" />
         <LinearLayout
             android:id="@+id/ln_layout5"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical" />
-        <LinearLayout
-            android:background="#BABABA"
-            android:id="@+id/ln_layout6"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical" />
-        <LinearLayout
-            android:id="@+id/ln_layout7"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
