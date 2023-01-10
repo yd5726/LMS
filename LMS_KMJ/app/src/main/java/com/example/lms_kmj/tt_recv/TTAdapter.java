@@ -9,16 +9,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lms_kmj.R;
+import com.example.lms_kmj.board.BoardVO;
 
 import java.util.ArrayList;
 
 public class TTAdapter extends RecyclerView.Adapter<TTAdapter.ViewHolder>{
     LayoutInflater inflater;
-    ArrayList<TT_DTO> list;
+    ArrayList<BoardVO> aclist;
 
-    public TTAdapter(LayoutInflater inflater, ArrayList<TT_DTO> list) {
+    public TTAdapter(LayoutInflater inflater, ArrayList<BoardVO> aclist) {
         this.inflater = inflater;
-        this.list = list;
+        this.aclist = aclist;
     }
 
     @NonNull
@@ -32,20 +33,14 @@ public class TTAdapter extends RecyclerView.Adapter<TTAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        for(int i=0; i<list.size(); i++) {
-            TT_DTO tt_dto = list.get(i);
-            String date = tt_dto.getDate();
-            String time = tt_dto.getTime();
-            String context = tt_dto.getContext();
-            holder.tt_recv_date.setText(date);
-            holder.tt_recv_time.setText(time);
-            holder.tt_recv_content.setText(context);
-        }
+        holder.tt_recv_date.setText(aclist.get(position).getWritedate());// 년원일 짤라서
+        //holder.tt_recv_time.setText(time);
+        holder.tt_recv_content.setText(aclist.get(position).getContent());
     }
 
     @Override
     public int getItemCount() {
-        return (null != list ? list.size() : 0);
+        return (null != aclist ? aclist.size() : 0);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -54,7 +49,7 @@ public class TTAdapter extends RecyclerView.Adapter<TTAdapter.ViewHolder>{
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tt_recv_date = itemView.findViewById(R.id.tt_recv_date);
-            tt_recv_time = itemView.findViewById(R.id.tt_recv_time);
+            //tt_recv_time = itemView.findViewById(R.id.tt_recv_time);
             tt_recv_content = itemView.findViewById(R.id.tt_recv_content);
         }
     }
