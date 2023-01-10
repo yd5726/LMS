@@ -9,12 +9,31 @@
     tools:context=".drawer.MyInfoActivity">
     <!--상단바-->
     <include layout="@layout/top_toolbar"/>
-    <TextView
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:text="나의 정보"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:text="나의 정보"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <androidx.cardview.widget.CardView
+                app:cardCornerRadius="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:src="@drawable/lms_logo"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"/>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

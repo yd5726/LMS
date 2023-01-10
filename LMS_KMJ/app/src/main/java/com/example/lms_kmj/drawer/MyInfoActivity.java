@@ -10,6 +10,7 @@ import com.example.lms_kmj.R;
 
 public class MyInfoActivity extends AppCompatActivity {
     Toolbar top_toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
