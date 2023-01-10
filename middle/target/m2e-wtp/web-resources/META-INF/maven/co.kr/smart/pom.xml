@@ -14,6 +14,24 @@
 		<org.slf4j-version>1.6.6</org.slf4j-version>
 	</properties>
 	<dependencies>
+	<dependency>
+    <groupId>com.oracle.database.security</groupId>
+    <artifactId>oraclepki</artifactId>
+    <version>19.13.0.0</version>
+</dependency>
+		<!-- 2023-01-10 -->
+		<!-- https://mvnrepository.com/artifact/com.oracle.database.security/osdt_core -->
+		<dependency>
+		    <groupId>com.oracle.database.security</groupId>
+		    <artifactId>osdt_core</artifactId>
+		    <version>19.13.0.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.oracle.database.security/osdt_cert -->
+		<dependency>
+		    <groupId>com.oracle.database.security</groupId>
+		    <artifactId>osdt_cert</artifactId>
+		    <version>19.7.0.0</version>
+		</dependency>
 		<!-- 오라클 jdbc 라이브러리 -->
 		<dependency>
 		    <groupId>com.oracle.database.jdbc</groupId>
