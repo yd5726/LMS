@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import lms_board.BoardVO;
 import lms_lecture.LectureVO;
@@ -73,6 +74,7 @@ public class LMSController {
 	public String aclist(String writedate) {
 		List<BoardVO> aclist = session.selectList("board.list",writedate);
 		
-		return new Gson().toJson(aclist);
+		//return new Gson().toJson(aclist);
+		return new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(aclist);
 	}
 }
