@@ -1,5 +1,6 @@
 package com.example.lms_kmj.tt_recv;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.lms_kmj.R;
 import com.example.lms_kmj.board.BoardVO;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class TTAdapter extends RecyclerView.Adapter<TTAdapter.ViewHolder>{
     LayoutInflater inflater;
@@ -33,7 +36,8 @@ public class TTAdapter extends RecyclerView.Adapter<TTAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.tt_recv_date.setText(aclist.get(position).getWritedate());// 년원일 짤라서
+        holder.tt_recv_date.setText(aclist.get(position).getWritedate().toString());
+        //holder.tt_recv_date.setText(aclist.get(position).getWritedate());
         //holder.tt_recv_time.setText(time);
         holder.tt_recv_content.setText(aclist.get(position).getContent());
     }

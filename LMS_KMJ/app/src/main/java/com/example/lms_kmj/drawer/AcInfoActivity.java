@@ -1,6 +1,7 @@
 package com.example.lms_kmj.drawer;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -12,14 +13,28 @@ import com.example.lms_kmj.R;
 
 public class AcInfoActivity extends AppCompatActivity {
     ImageView link_btn1,link_btn2;
+    Toolbar top_toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ac_info);
 
+        top_toolbar = findViewById(R.id.top_toolbar);
         link_btn1 = findViewById(R.id.link_btn1);
         link_btn2 = findViewById(R.id.link_btn2);
+
+        // 상단바
+        top_toolbar.setTitle("학원 소개");
+
+        // 상단바 뒤로가기 버튼
+        top_toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
         link_btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

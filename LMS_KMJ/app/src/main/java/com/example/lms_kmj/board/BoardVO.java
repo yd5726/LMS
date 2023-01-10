@@ -1,9 +1,15 @@
 package com.example.lms_kmj.board;
 
+import java.sql.Date;
+
 public class BoardVO {
-    private String board_code, title, content
+    /*private String board_code, title, content
             ,writer,writedate,readcnt,category
+            ,root,indent,step,lecture_code;*/
+    private String board_code, title, content
+            ,writer,readcnt,category
             ,root,indent,step,lecture_code;
+    private Date writedate;
 
     public String getBoard_code() {
         return board_code;
@@ -37,11 +43,11 @@ public class BoardVO {
         this.writer = writer;
     }
 
-    public String getWritedate() {
+    public Date getWritedate() {
         return writedate;
     }
 
-    public void setWritedate(String writedate) {
+    public void setWritedate(Date writedate) {
         this.writedate = writedate;
     }
 

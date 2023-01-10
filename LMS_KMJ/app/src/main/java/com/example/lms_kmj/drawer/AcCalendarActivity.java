@@ -16,6 +16,7 @@ import com.example.lms_kmj.R;
 import com.example.lms_kmj.board.BoardVO;
 import com.example.lms_kmj.tt_recv.TTAdapter;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -63,11 +64,14 @@ public class AcCalendarActivity extends AppCompatActivity {
                         .sendPost("aclist.mj", new CommonMethod.CallBackResult() {
                             @Override
                             public void result(boolean isResult, String data) {
-                                ArrayList<BoardVO> aclist = new Gson().fromJson(data, new TypeToken<ArrayList<BoardVO>>(){}.getType());
+                                //ArrayList<BoardVO> aclist = new Gson().fromJson(data, new TypeToken<ArrayList<BoardVO>>(){}.getType());
+                                ArrayList<BoardVO> aclist = new GsonBuilder().setDateFormat("yyyy-MM-dd").create().fromJson(data, new TypeToken<ArrayList<BoardVO>>(){}.getType());
                                 Log.d("로그", "aclist: "+aclist);
-
+                                //Log.d("로그", "getWritedate: "+aclist.get(1).getWritedate());
+                                if(aclist != null) {
                                     tt_recv_list.setAdapter(new TTAdapter(getLayoutInflater(), aclist));
-                                    tt_recv_list.setLayoutManager(new LinearLayoutManager(getApplicationContext(),RecyclerView.VERTICAL,false));
+                                    tt_recv_list.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
+                                }
                             }
                         });
             }

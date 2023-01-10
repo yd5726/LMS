@@ -7,6 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".drawer.AcInfoActivity">
+    <!--상단바-->
+    <include layout="@layout/top_toolbar"/>
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
