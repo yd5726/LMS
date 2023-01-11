@@ -85,4 +85,31 @@ public class LMSController {
 		
 		return new Gson().toJson(st_ttlist);
 	}
+	
+	// idcnt = 아이디 중복 확인(존재x = 0, 존재o = 1)
+	// idCheck = 사용가능 5 / 사용불가능 -1  
+	@RequestMapping(value = "/idCheck.mj", produces ="text/html;charset=utf-8")
+	public String idCheck(String id) {
+		int idcnt = session.selectOne("member.idCheck", id);
+		System.out.println("idcnt = " + idcnt);
+		int idCheck;
+		if(idcnt == 0) {
+			idCheck = 5;
+			return new Gson().toJson(idCheck);
+		}else if(idcnt >= 1) {
+			idCheck = -1;
+			return new Gson().toJson(idCheck);
+		}else {
+			idCheck = -1;
+			return new Gson().toJson(idCheck);
+		}
+	}
+	
+	//나의 정보 조회
+	@RequestMapping(value = "/my_info.mj", produces ="text/html;charset=utf-8")
+	public String my_info(String id) {
+		MemberVO member = session.selectOne("member.my_info", id);
+	
+		return new Gson().toJson(member);
+	}
 }

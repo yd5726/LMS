@@ -11,8 +11,22 @@ where id = #{id} and pw = #{pw}
 <insert id='join'>
 insert into member(member_code,id,pw,member_name,gender
 ,email,birth,phone,type)
-values ( SEQ_MEMBER.nextval,#{id},#{pw},#{member_name},#{gender}
-,#{email},#{birth},#{phone},#{type})	
+values ( SEQ_MEMBER.nextval,#{id},#{pw},#{member_name, jdbcType=VARCHAR}
+,#{gender},#{email, jdbcType=VARCHAR},#{birth, jdbcType=VARCHAR}
+,#{phone, jdbcType=VARCHAR},#{type})	
 </insert>
+
+<!-- 아이디 중복확인(존재유무) -->
+<select id='idCheck' resultType='integer'>
+select count(*) from member where id = #{id}
+</select>
+
+<!-- 나의 정보 조회 -->
+<select id='my_info' resultType="lms_member.MemberVO">
+select member_code,id,pw,member_name,gender,email
+,birth
+,phone,type 
+from member where id =#{id}	
+</select>
 
 </mapper>
