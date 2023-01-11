@@ -72,62 +72,26 @@ public class TTActivity extends AppCompatActivity {
                                 @Override
                                 public void result(boolean isResult, String data) {
                                     ArrayList<LectureVO> list = new Gson().fromJson(data, new TypeToken<ArrayList<LectureVO>>() {}.getType());
-                                    Log.d("로그", "list.size(): "+list.size());   // list.size():15
-                                    Log.d("로그", "list: "+list);
-                                    Log.d("로그", "getvDay(0): "+list.get(0).getvDay());
-                                    Log.d("로그", "getvDay(1): "+list.get(1).getvDay());
-                                    Log.d("로그", "getvDay(2): "+list.get(2).getvDay());
-                                    Log.d("로그", "getvDay(3): "+list.get(3).getvDay());
-                                    Log.d("로그", "getvDay(4): "+list.get(4).getvDay());
-                                    Log.d("로그", "getvDay(5): "+list.get(5).getvDay());
-                                    for (int i = 0; i < 3; i++) {
-                                    //for (int i = 0; i < Integer.parseInt(list.get(i).getTimetable_code()); i++) {
-                                        for (int k = 0; k < 6; k++) {
-                                            //linearLayouts.get(k).addView(getTextView("("+i+","+k+")"));
-                                            /*
-                                            int index = 0;
-                                            if (list.get(k).getvDay().equals("월") && Integer.parseInt(list.get(k).getTimetable_code()) == i) {
-                                                index = ((k+1)*1);
-                                                Log.d("로그", "i: "+i+",k: "+k+", index: "+index);
-                                            } else if (list.get(k).getvDay().equals("화")) {
-                                                index = ((k+1)*2);
-                                                Log.d("로그", "i: "+i+",k: "+k+", index: "+index);
-                                            } else if (list.get(k).getvDay().equals("수")) {
-                                                index = ((k+1)*3);
-                                                Log.d("로그", "i: "+i+",k: "+k+", index: "+index);
-                                            } else if (list.get(k).getvDay().equals("목")) {
-                                                index = ((k+1)*4);
-                                                Log.d("로그", "i: "+i+",k: "+k+", index: "+index);
-                                            } else if (list.get(k).getvDay().equals("금")) {
-                                                index = ((k+1)*5);
-                                                Log.d("로그", "i: "+i+",k: "+k+", index: "+index);
+                                    for(int k = 0; k < 3;k++) {
+                                        linearLayouts.get((6*k)).addView(getTextView((k+1) + "교시"));
+                                        for (int i = 0 ; i < list.size() ; i++){
+                                            int index = 0+(6*k);
+                                            if (list.get(i).getvDay().equals("월") && Integer.parseInt(list.get(i).getTimetable_code()) == k+1) {
+                                                index = 1+(6*k);
+                                            } else if (list.get(i).getvDay().equals("화") && Integer.parseInt(list.get(i).getTimetable_code()) == k+1) {
+                                                index = 2+(6*k);
+                                            } else if (list.get(i).getvDay().equals("수") && Integer.parseInt(list.get(i).getTimetable_code()) == k+1) {
+                                                index = 3+(6*k);
+                                            } else if (list.get(i).getvDay().equals("목") && Integer.parseInt(list.get(i).getTimetable_code()) == k+1) {
+                                                index = 4+(6*k);
+                                            } else if (list.get(i).getvDay().equals("금") && Integer.parseInt(list.get(i).getTimetable_code()) == k+1) {
+                                                index = 5+(6*k);
                                             } else {
-                                                index = 12;  // 여기 타면 오류
+                                              continue;
                                             }
                                             linearLayouts.get(index).addView(
-                                                    getTextView(list.get(index).getLecture_name())
+                                                    getTextView(list.get(i).getLecture_name() + "\n" + list.get(i).getRoom_name())
                                             );
-                                            */
-
-                                            /*
-                                            int index = 0;
-                                            if (list.get(i).getvDay().equals("월") && Integer.parseInt(list.get(i).getTimetable_code())==1) {
-                                                index = 0;
-                                            } else if (list.get(i).getvDay().equals("화")) {
-                                                index = 1;
-                                            } else if (list.get(i).getvDay().equals("수")) {
-                                                index = 2;
-                                            } else if (list.get(i).getvDay().equals("목")) {
-                                                index = 3;
-                                            } else if (list.get(i).getvDay().equals("금")) {
-                                                index = 4;
-                                            } else {
-                                                index = list.size() + 1;  // 여기 타면 오류  //list.size():15
-                                            }
-                                            linearLayouts.get(index).addView(
-                                                    getTextView(list.get(i).getLecture_name())
-                                            );
-                                            */
                                         }
                                     }
                                 }

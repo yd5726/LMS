@@ -4,15 +4,8 @@ public class LectureVO {
     private String lecture_code, lecture_name
             , startdate, enddate, room_code
             , teacher_code, subject_code
-            , timetable_code , vDay;
-
-    public String getvDay() {
-        return vDay;
-    }
-
-    public void setvDay(String vDay) {
-        this.vDay = vDay;
-    }
+            , timetable_code
+            , vDay, room_name;
 
     public String getLecture_code() {
         return lecture_code;
@@ -78,4 +71,19 @@ public class LectureVO {
         this.timetable_code = timetable_code;
     }
 
+    public String getvDay() {
+        return vDay;
+    }
+
+    public void setvDay(String vDay) {
+        this.vDay = vDay;
+    }
+
+    public String getRoom_name() {
+        return room_name;
+    }
+
+    public void setRoom_name(String room_name) {
+        this.room_name = room_name;
+    }
 }
