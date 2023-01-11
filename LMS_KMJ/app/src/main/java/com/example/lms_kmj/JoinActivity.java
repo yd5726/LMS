@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.RadioButton;
@@ -39,7 +40,8 @@ public class JoinActivity extends AppCompatActivity {
     RadioGroup radioGroup1,radioGroup2;
     TextView cancel_btn, confirm_btn, id_ck_tv;
     RadioButton stud_rd, teach_rd, male_rd, female_rd;
-    String type_result ="STUD", gender_result;
+    String type_result ="STUD", gender_result="남";
+    int id_ck_cnt = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,29 +122,36 @@ public class JoinActivity extends AppCompatActivity {
         confirm_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MemberVO vo = new MemberVO();
-                vo.setType(type_result);
-                vo.setId(id_et.getText()+"");
-                vo.setPw(pw_et.getText()+"");
-                vo.setMember_name(name_et.getText()+"");
-                vo.setGender(gender_result);
-                vo.setEmail(email_et.getText()+"");
-                vo.setBirth(birth_et.getText()+"");
-                vo.setPhone(phone_et.getText()+"");
-                new CommonMethod().setParams("param", vo).setParams("member", new Gson().toJson(vo)).
+                Log.d("로그", "회원가입 확인버튼 누름 id_ck_cnt: " + id_ck_cnt);
+                if(id_ck_cnt == 5){
+                    MemberVO vo = new MemberVO();
+                    vo.setType(type_result);
+                    vo.setId(id_et.getText()+"");
+                    vo.setPw(pw_et.getText()+"");
+                    vo.setMember_name(name_et.getText()+"");
+                    vo.setGender(gender_result);
+                    vo.setEmail(email_et.getText()+"");
+                    vo.setBirth(birth_et.getText()+"");
+                    vo.setPhone(phone_et.getText()+"");
+                    new CommonMethod().setParams("param", vo).setParams("member", new Gson().toJson(vo)).
                         sendPost("join.mj", new CommonMethod.CallBackResult() {
-                        @Override
-                        public void result(boolean isResult, String data) {
-                            if(data ==null || data.equals("null")){
-                                Toast.makeText(JoinActivity.this, "입력 값을 확인해주세요!", Toast.LENGTH_SHORT).show();
-                            }else{
-                                Toast.makeText(JoinActivity.this, "회원가입 완료!", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(JoinActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
+                            @Override
+                            public void result(boolean isResult, String data) {
+                                Log.d("로그", "회원가입 확인버튼 누름 data 출력 : " + data);
+                                if(data == null || data.equals("null")){
+                                    Toast.makeText(JoinActivity.this, "입력 값을 확인해주세요!", Toast.LENGTH_SHORT).show();
+                                } else{
+                                    Toast.makeText(JoinActivity.this, "회원가입 완료!", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(JoinActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
                             }
-                        }
-                    });
+                        });
+                }//if()
+                else{
+                    Toast.makeText(JoinActivity.this, "아이디 중복확인을 해주세요.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -151,7 +160,27 @@ public class JoinActivity extends AppCompatActivity {
         id_ck_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(JoinActivity.this, "아이디 중복확인 완료!", Toast.LENGTH_SHORT).show();
+                // 아이디 입력 안하고 아이디 중복확인 누르면
+                if(id_et.getText().toString().length() < 1 ){
+                    Toast.makeText(JoinActivity.this, "아이디를 입력 하세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }//if()
+                new CommonMethod().setParams("id",id_et.getText().toString())
+                        .sendPost("idCheck.mj", new CommonMethod.CallBackResult() {
+                            @Override
+                            public void result(boolean isResult, String data) {
+                                Log.d("로그", "중복확인데이터: " + data);
+                                if(data.equals("5") && id_et.getText() != null){
+                                    Toast.makeText(JoinActivity.this, "사용가능한 아이디 입니다.", Toast.LENGTH_SHORT).show();
+                                    id_ck_cnt = 5;    // 아이디 중복 버튼 눌렀는지 확인
+                                }else if(data.equals("-1")){
+                                    Toast.makeText(JoinActivity.this, "중복된 아이디가 존재합니다.", Toast.LENGTH_SHORT).show();
+                                    id_et.setText("");
+                                }else {
+                                    Log.d("로그", "오류");
+                                }
+                            }
+                        });
             }
         });
     }//onCreate()

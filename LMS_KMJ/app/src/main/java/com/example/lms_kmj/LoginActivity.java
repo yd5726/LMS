@@ -54,12 +54,12 @@ public class LoginActivity extends AppCompatActivity {
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     Common common = new Common();
                                     MemberVO account = new Gson().fromJson(data, MemberVO.class);
-                                    common.setLoginInfo(account); // 임시로그인
+                                    common.setLoginInfo(account); // 로그인 정보 담기
                                     LoginInfo.check_id = account.getId();
                                     intent.putExtra("account", account+"");
                                     setResult(RESULT_OK, intent);
                                     startActivity(intent);
-                                    finish();   // finish 하고 다음 화면으로 이동
+                                    finish();   // finish 하고 다음 화면(MainActivity)으로 이동
                                 }
                             }
                         });
