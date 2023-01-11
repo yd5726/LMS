@@ -15,14 +15,11 @@ import android.widget.TextView;
 
 import com.example.conn.CommonMethod;
 import com.example.lms_kmj.common.Common;
-import com.example.lms_kmj.lecture.LectureVO;
+import com.example.lms_kmj.enrolment.EnrolmentVO;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class TTActivity extends AppCompatActivity {
     Toolbar tt_toolbar;
@@ -64,45 +61,37 @@ public class TTActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        // 타입 정보 출력
+        Log.d("로그", "GET TYPE: "+common.getLoginInfo().getType());
 
         tt_toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 for (int i = 0; i < linearLayouts.size(); i++) {
                     linearLayouts.get(i).removeAllViews();
-                }
+                }//for()
                 if(item.getItemId() == R.id.tt_toolbar_reloading) {
-                    new CommonMethod().setParams("teacher_code",common.getLoginInfo().getMember_code())
-                            .sendPost("ttlist.mj", new CommonMethod.CallBackResult() {
-                                @Override
-                                public void result(boolean isResult, String data) {
-                                    ArrayList<LectureVO> list = new Gson().fromJson(data, new TypeToken<ArrayList<LectureVO>>() {}.getType());
-                                    for(int k = 0; k < 3;k++) {
-                                        linearLayouts.get((6*k)).addView(getTextView((k+1) + "교시"));
-                                        for (int i = 0 ; i < list.size() ; i++){
-                                            int index = 0+(6*k);
-                                            if (list.get(i).getvDay().equals("월") && Integer.parseInt(list.get(i).getTimetable_code()) == k+1) {
-                                                index = 1+(6*k);
-                                            } else if (list.get(i).getvDay().equals("화") && Integer.parseInt(list.get(i).getTimetable_code()) == k+1) {
-                                                index = 2+(6*k);
-                                            } else if (list.get(i).getvDay().equals("수") && Integer.parseInt(list.get(i).getTimetable_code()) == k+1) {
-                                                index = 3+(6*k);
-                                            } else if (list.get(i).getvDay().equals("목") && Integer.parseInt(list.get(i).getTimetable_code()) == k+1) {
-                                                index = 4+(6*k);
-                                            } else if (list.get(i).getvDay().equals("금") && Integer.parseInt(list.get(i).getTimetable_code()) == k+1) {
-                                                index = 5+(6*k);
-                                            } else {
-                                              continue;
-                                            }
-                                            linearLayouts.get(index).addView(
-                                                    getTextView(list.get(i).getLecture_name() + "\n" + list.get(i).getRoom_name())
-                                            );
-                                        }
+                    if(common.getLoginInfo().getType().equals("STUD")){
+                        // 회원 중 학생 일주일 시간표 출력
+                        new CommonMethod().setParams("member_code",common.getLoginInfo().getMember_code())
+                                .sendPost("st_ttlist.mj", new CommonMethod.CallBackResult() {
+                                    @Override
+                                    public void result(boolean isResult, String data) {
+                                        printTTlist(data);
                                     }
-                                }
-                            });
+                                });
+                    }else if(common.getLoginInfo().getType().equals("TEACH")){
+                        // 회원 중 선생 일주일 시간표 출력
+                        new CommonMethod().setParams("teacher_code",common.getLoginInfo().getMember_code())
+                                .sendPost("ttlist.mj", new CommonMethod.CallBackResult() {
+                                    @Override
+                                    public void result(boolean isResult, String data) {
+                                        printTTlist(data);
+                                    }
+                                });
+                    }
                     return true;
-                }
+                }//if()
                 return false;
             }
         });
@@ -116,4 +105,30 @@ public class TTActivity extends AppCompatActivity {
         temp_tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, 44);
         return temp_tv;
     }//getTextView()
+
+    void printTTlist(String data){
+        ArrayList<EnrolmentVO> list = new Gson().fromJson(data, new TypeToken<ArrayList<EnrolmentVO>>() {}.getType());
+        for(int k = 0; k < 3;k++) {
+            linearLayouts.get((6*k)).addView(getTextView((k+1) + "교시"));
+            for (int i = 0 ; i < list.size() ; i++){
+                int index = 0+(6*k);
+                if (list.get(i).getvDay().equals("월") && Integer.parseInt(list.get(i).getTimetable_code()) == k+1) {
+                    index = 1+(6*k);
+                } else if (list.get(i).getvDay().equals("화") && Integer.parseInt(list.get(i).getTimetable_code()) == k+1) {
+                    index = 2+(6*k);
+                } else if (list.get(i).getvDay().equals("수") && Integer.parseInt(list.get(i).getTimetable_code()) == k+1) {
+                    index = 3+(6*k);
+                } else if (list.get(i).getvDay().equals("목") && Integer.parseInt(list.get(i).getTimetable_code()) == k+1) {
+                    index = 4+(6*k);
+                } else if (list.get(i).getvDay().equals("금") && Integer.parseInt(list.get(i).getTimetable_code()) == k+1) {
+                    index = 5+(6*k);
+                } else {
+                    continue;
+                }
+                linearLayouts.get(index).addView(
+                        getTextView(list.get(i).getLecture_name() + "\n" + list.get(i).getRoom_name())
+                );
+            }//for()
+        }//for()
+    }//printTTlist()
 }
