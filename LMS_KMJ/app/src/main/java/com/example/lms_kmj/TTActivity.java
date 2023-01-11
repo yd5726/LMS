@@ -3,8 +3,10 @@ package com.example.lms_kmj;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +68,9 @@ public class TTActivity extends AppCompatActivity {
         tt_toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                for (int i = 0; i < linearLayouts.size(); i++) {
+                    linearLayouts.get(i).removeAllViews();
+                }
                 if(item.getItemId() == R.id.tt_toolbar_reloading) {
                     new CommonMethod().setParams("teacher_code",common.getLoginInfo().getMember_code())
                             .sendPost("ttlist.mj", new CommonMethod.CallBackResult() {
@@ -107,6 +112,8 @@ public class TTActivity extends AppCompatActivity {
         TextView temp_tv = new TextView(this);
         temp_tv.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         temp_tv.setText(data);
+        temp_tv.setTextColor(Color.BLACK);
+        temp_tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, 44);
         return temp_tv;
     }//getTextView()
 }
