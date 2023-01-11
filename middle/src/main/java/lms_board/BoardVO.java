@@ -3,9 +3,6 @@ package lms_board;
 import java.sql.Date;
 
 public class BoardVO {
-    /*private String board_code, title, content
-            ,writer,writedate,readcnt,category
-            ,root,indent,step,lecture_code;*/
     private String board_code, title, content
             ,writer,readcnt,category
             ,root,indent,step,lecture_code;

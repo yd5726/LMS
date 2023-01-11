@@ -1,11 +1,11 @@
-package lms_lecture;
+package lms_enrolment;
 
-public class LectureVO {
+public class EnrolmentVO {
 	private String lecture_code, lecture_name
 				, startdate, enddate, room_code
 				, teacher_code, subject_code
 				, timetable_code
-			    , vDay, room_name;
+			    , vDay, room_name, member_code;
 
 	public String getLecture_code() {
 		return lecture_code;
@@ -85,5 +85,13 @@ public class LectureVO {
 
 	public void setRoom_name(String room_name) {
 		this.room_name = room_name;
+	}
+
+	public String getMember_code() {
+		return member_code;
+	}
+
+	public void setMember_code(String member_code) {
+		this.member_code = member_code;
 	}
 }

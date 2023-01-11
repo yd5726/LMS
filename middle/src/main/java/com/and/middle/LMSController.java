@@ -15,7 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import lms_board.BoardVO;
-import lms_lecture.LectureVO;
+import lms_enrolment.EnrolmentVO;
 import lms_member.MemberVO;
 
 @RestController
@@ -61,10 +61,10 @@ public class LMSController {
 		return new Gson().toJson(result + "");
 	}
 	
-	// 특정 회원의 일주일 시간표
+	// 특정 강사인 회원의 일주일 시간표
 	@RequestMapping(value = "/ttlist.mj", produces ="text/html;charset=utf-8")
 	public String ttlist(int teacher_code) {
-		List<LectureVO> ttlist = session.selectList("lecture.list",teacher_code);
+		List<EnrolmentVO> ttlist = session.selectList("lecture.list",teacher_code);
 		
 		return new Gson().toJson(ttlist);
 	}
@@ -76,5 +76,13 @@ public class LMSController {
 		
 		//return new Gson().toJson(aclist);
 		return new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(aclist);
+	}
+	
+	// 특정 학생인 회원의 일주일 시간표
+	@RequestMapping(value = "/st_ttlist.mj", produces ="text/html;charset=utf-8")
+	public String st_ttlist(int member_code) {
+		List<EnrolmentVO> st_ttlist = session.selectList("lecture.st_list",member_code);
+		
+		return new Gson().toJson(st_ttlist);
 	}
 }
