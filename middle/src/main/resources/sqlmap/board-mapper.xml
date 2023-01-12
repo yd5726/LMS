@@ -3,11 +3,6 @@
 <mapper namespace="board">
 <!-- board 날짜별 정보 조회 -->
 <select id="list" resultType="lms_board.BoardVO">
-<!-- select writedate,title, content
-from board
-where category = 'no'
-and writedate = #{writedate} -->
-
 select writedate,title,content
 from board
 where category = 'no'

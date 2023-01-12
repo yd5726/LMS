@@ -21,6 +21,7 @@ values ( SEQ_MEMBER.nextval,#{id},#{pw},#{member_name, jdbcType=VARCHAR}
 select count(*) from member where id = #{id}
 </select>
 
+<!-- ,to_char(birth,'yyyy-MM-dd') -->
 <!-- 나의 정보 조회 -->
 <select id='my_info' resultType="lms_member.MemberVO">
 select member_code,id,pw,member_name,gender,email
@@ -29,4 +30,14 @@ select member_code,id,pw,member_name,gender,email
 from member where id =#{id}	
 </select>
 
+<!-- 나의 정보 수정 -->
+<update id ="modify_my_info">
+update member 
+set member_name = #{member_name}
+, gender = #{gender}
+, email = #{email}
+, birth = #{birth}
+, phone = #{phone}
+where id = #{id}
+</update>
 </mapper>

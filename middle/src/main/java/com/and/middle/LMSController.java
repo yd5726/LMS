@@ -1,9 +1,6 @@
 package com.and.middle;
-
 import java.util.HashMap;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,14 +38,16 @@ public class LMSController {
 		}else {
 			System.out.println("==로그인 실패==");
 		}		
-		return new Gson().toJson(member);
+		
+		return new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(member);
 	}
 	
 	// 회원가입
 	@RequestMapping(value = "/join.mj", produces ="text/html;charset=utf-8")
-	public String join(String member, HttpServletRequest request) {
-		MemberVO vo = new Gson().fromJson(member, MemberVO.class);
-		int result = session.insert("member.join",vo);
+	public String join(String member) {
+		MemberVO vo = new GsonBuilder().setDateFormat("yyyy-MM-dd").create().fromJson(member,MemberVO.class);
+		session.insert("member.join",vo);
+		
 		if(vo != null) {
 			System.out.println("==회원가입 성공==");
 			System.out.println("id:" + vo.getId());
@@ -58,7 +57,8 @@ public class LMSController {
 		}else {
 			System.out.println("==회원가입 실패==");
 		}	
-		return new Gson().toJson(result + "");
+		
+		return new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(vo);
 	}
 	
 	// 특정 강사인 회원의 일주일 시간표
@@ -74,7 +74,6 @@ public class LMSController {
 	public String aclist(String writedate) {
 		List<BoardVO> aclist = session.selectList("board.list",writedate);
 		
-		//return new Gson().toJson(aclist);
 		return new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(aclist);
 	}
 	
@@ -109,7 +108,24 @@ public class LMSController {
 	@RequestMapping(value = "/my_info.mj", produces ="text/html;charset=utf-8")
 	public String my_info(String id) {
 		MemberVO member = session.selectOne("member.my_info", id);
+
+		return new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(member);
+	}
 	
-		return new Gson().toJson(member);
+	//나의 정보 수정
+	@RequestMapping(value = "/modify_my_info.mj", produces ="text/html;charset=utf-8")
+	public String modify_my_info(String member) {
+		
+		MemberVO modify_member = new Gson().fromJson(member, MemberVO.class);
+		int result = session.update("member.modify_my_info",modify_member);
+		
+		if(result > 0) {
+			System.out.println("==회원 정보 수정 성공==");
+
+		}else {
+			System.out.println("==회원 정보 수정 실패==");
+		}
+	
+		return new Gson().toJson(modify_member);
 	}
 }
