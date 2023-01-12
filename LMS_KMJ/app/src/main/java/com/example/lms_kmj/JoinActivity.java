@@ -20,8 +20,10 @@ import com.example.lms_kmj.member.MemberVO;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class JoinActivity extends AppCompatActivity {
@@ -133,21 +135,21 @@ public class JoinActivity extends AppCompatActivity {
                     vo.setEmail(email_et.getText()+"");
                     vo.setBirth(birth_et.getText()+"");
                     vo.setPhone(phone_et.getText()+"");
-                    new CommonMethod().setParams("param", vo).setParams("member", new Gson().toJson(vo)).
-                        sendPost("join.mj", new CommonMethod.CallBackResult() {
-                            @Override
-                            public void result(boolean isResult, String data) {
-                                Log.d("로그", "회원가입 확인버튼 누름 data 출력 : " + data);
-                                if(data == null || data.equals("null")){
-                                    Toast.makeText(JoinActivity.this, "입력 값을 확인해주세요!", Toast.LENGTH_SHORT).show();
-                                } else{
-                                    Toast.makeText(JoinActivity.this, "회원가입 완료!", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(JoinActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
+                    new CommonMethod().setParams("member", new Gson().toJson(vo)).
+                            sendPost("join.mj", new CommonMethod.CallBackResult() {
+                                @Override
+                                public void result(boolean isResult, String data) {
+                                    Log.d("로그", "회원가입 확인버튼 누름 data 출력 : " + data);
+                                    if(data == null || data.equals("null")){
+                                        Toast.makeText(JoinActivity.this, "입력 값을 확인해주세요!", Toast.LENGTH_SHORT).show();
+                                    } else{
+                                        Toast.makeText(JoinActivity.this, "회원가입 완료!", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(JoinActivity.this, LoginActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
                                 }
-                            }
-                        });
+                            });
                 }//if()
                 else{
                     Toast.makeText(JoinActivity.this, "아이디 중복확인을 해주세요.", Toast.LENGTH_SHORT).show();
@@ -187,7 +189,7 @@ public class JoinActivity extends AppCompatActivity {
 
     // 날짜 형식 변환
     public void updateDate(){
-        String format = "YY/MM/dd";
+        String format = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             simpleDateFormat = new SimpleDateFormat(format, Locale.KOREA);

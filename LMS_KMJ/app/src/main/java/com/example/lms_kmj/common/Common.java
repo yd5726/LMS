@@ -22,7 +22,7 @@ public class Common {
     }
 
     //임시 로그인 정보 저장
-    public void setTempLoginInfo(){
+    /*public void setTempLoginInfo(){
         MemberVO temp = new MemberVO();
         temp.setMember_code("3");
         temp.setMember_name("테스트유저1");
@@ -34,7 +34,7 @@ public class Common {
         temp.setPw("000aA");
         temp.setBirth("23/01/02");
         this.loginInfo = temp;
-    }
+    }*/
 
     // 스크롤 내리면 TOP 버튼 보이기
     public void scrollTop(View scroll, View btnTop){
