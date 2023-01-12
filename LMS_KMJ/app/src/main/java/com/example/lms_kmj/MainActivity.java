@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     Button tt_btn;
     DrawerLayout drawerLayout;
     View drawerView;
-    TextView myInfo_tv,acCalendar_tv,acInfo_tv,logout_tv;
+    TextView myInfo_tv,acCalendar_tv,acInfo_tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         myInfo_tv = findViewById(R.id.myInfo_tv);
         acCalendar_tv = findViewById(R.id.acCalendar_tv);
         acInfo_tv = findViewById(R.id.acInfo_tv);
-        logout_tv = findViewById(R.id.logout_tv);
 
         // 상단바
         top_toolbar.setTitle("홈");
@@ -98,12 +97,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AcInfoActivity.class);
                 startActivity(intent);
-            }
-        });
-        logout_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
             }
         });
     }//onCreate()
