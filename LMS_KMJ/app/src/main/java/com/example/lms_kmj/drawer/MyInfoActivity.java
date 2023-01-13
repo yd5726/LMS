@@ -2,42 +2,46 @@ package com.example.lms_kmj.drawer;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.conn.CommonMethod;
-import com.example.lms_kmj.JoinActivity;
 import com.example.lms_kmj.LoginActivity;
 import com.example.lms_kmj.R;
-import com.example.lms_kmj.board.BoardVO;
 import com.example.lms_kmj.common.Common;
 import com.example.lms_kmj.member.MemberVO;
-import com.example.lms_kmj.tt_recv.TTAdapter;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Locale;
 
 public class MyInfoActivity extends AppCompatActivity {
     Toolbar top_toolbar;
     TextView member_code_data,id_data,pw_data
-            ,member_name_data_tv,gender_data_tv,email_data_tv,birth_data_tv,phone_data_tv
+            ,member_name_data_tv,email_data_tv,birth_data_tv,phone_data_tv
             ,type_data,modify_btn,cancel_btn,confirm_btn;
-    EditText member_name_data_et,gender_data_et,email_data_et,birth_data_et,phone_data_et;
-    LinearLayout modify_ln1,modify_ln2;
+    EditText member_name_data_et,email_data_et,birth_data_et,phone_data_et;
+    LinearLayout modify_ln1,modify_ln2,modify_ln3,modify_ln4;
+    RadioGroup radioGroup;
+    RadioButton male_rd, female_rd;
+    String modify_gender_info ="남";
+    ImageView profile_image_0,profile_image_1;
+    Dialog popup_dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +56,9 @@ public class MyInfoActivity extends AppCompatActivity {
         member_name_data_tv = findViewById(R.id.member_name_data_tv);
         member_name_data_et = findViewById(R.id.member_name_data_et);
 
-        gender_data_tv = findViewById(R.id.gender_data_tv);
-        gender_data_et = findViewById(R.id.gender_data_et);
+        radioGroup = findViewById(R.id.radioGroup);
+        male_rd = findViewById(R.id.male_rd);
+        female_rd = findViewById(R.id.female_rd);
 
         email_data_tv = findViewById(R.id.email_data_tv);
         email_data_et = findViewById(R.id.email_data_et);
@@ -64,7 +69,6 @@ public class MyInfoActivity extends AppCompatActivity {
         phone_data_tv = findViewById(R.id.phone_data_tv);
         phone_data_et = findViewById(R.id.phone_data_et);
 
-
         type_data = findViewById(R.id.type_data);
         modify_btn = findViewById(R.id.modify_btn);
         cancel_btn = findViewById(R.id.cancel_btn);
@@ -72,6 +76,15 @@ public class MyInfoActivity extends AppCompatActivity {
 
         modify_ln1 = findViewById(R.id.modify_ln1);
         modify_ln2 = findViewById(R.id.modify_ln2);
+        modify_ln3 = findViewById(R.id.modify_ln3);
+        modify_ln4 = findViewById(R.id.modify_ln4);
+
+        profile_image_0 = findViewById(R.id.profile_image_0);
+        profile_image_1 = findViewById(R.id.profile_image_1);
+
+        // 다이얼로그 생성
+        popup_dialog = new Dialog(MyInfoActivity.this);
+        popup_dialog.setContentView(R.layout.popup_dialog);
 
         // 상단바
         top_toolbar.setTitle("나의 정보");
@@ -97,10 +110,17 @@ public class MyInfoActivity extends AppCompatActivity {
                         pw_data.setText(my_info.getPw());
 
                         member_name_data_tv.setText(my_info.getMember_name());
-                        gender_data_tv.setText(my_info.getGender());
-                        email_data_tv.setText(my_info.getEmail());
 
-                        Log.d("로그", "my_info.getBirth(): "+my_info.getBirth());
+                        if(my_info.getGender().equals("남")){
+                            male_rd.setChecked(true);
+                            male_rd.setTextColor(Color.parseColor("#000000"));
+                            male_rd.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#47628D")));
+                        }else{
+                            female_rd.setChecked(true);
+                            female_rd.setTextColor(Color.parseColor("#000000"));
+                            female_rd.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#FF5D82")));
+                        }
+                        email_data_tv.setText(my_info.getEmail());
                         String bitrh_str = my_info.getBirth();
                         birth_data_tv.setText(bitrh_str.substring(0,10));
 
@@ -116,7 +136,7 @@ public class MyInfoActivity extends AppCompatActivity {
                 modify_ln1.setVisibility(View.GONE);
                 modify_ln2.setVisibility(View.VISIBLE);
 
-                // 회원 이름 정보
+                // 회원 이름 정보 텍스트 뷰를 에디트 뷰로 교체
                 member_name_data_tv.setVisibility(View.GONE);
                 member_name_data_et.setVisibility(View.VISIBLE);
                 member_name_data_et.setText(member_name_data_tv.getText());
@@ -130,21 +150,21 @@ public class MyInfoActivity extends AppCompatActivity {
                     }
                 });
 
-                // 회원 성별 정보
-                gender_data_tv.setVisibility(View.GONE);
-                gender_data_et.setVisibility(View.VISIBLE);
-                gender_data_et.setText(gender_data_tv.getText());
-                gender_data_et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                // 회원 성별 정보 텍스트 뷰를 에디트 뷰로 교체
+                male_rd.setEnabled(true);
+                female_rd.setEnabled(true);
+                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if(hasFocus){
-                            gender_data_et.setText("");
-                            gender_data_et.setHint(gender_data_tv.getText());
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        if(checkedId == R.id.male_rd){
+                            modify_gender_info = male_rd.getText().toString();
+                        }else if(checkedId == R.id.female_rd){
+                            modify_gender_info = female_rd.getText().toString();
                         }
                     }
                 });
 
-                // 회원 이메일 정보
+                // 회원 이메일 정보 텍스트 뷰를 에디트 뷰로 교체
                 email_data_tv.setVisibility(View.GONE);
                 email_data_et.setVisibility(View.VISIBLE);
                 email_data_et.setText(email_data_tv.getText());
@@ -158,7 +178,7 @@ public class MyInfoActivity extends AppCompatActivity {
                     }
                 });
 
-                // 회원 생일 정보
+                // 회원 생일 정보 텍스트 뷰를 에디트 뷰로 교체
                 birth_data_tv.setVisibility(View.GONE);
                 birth_data_et.setVisibility(View.VISIBLE);
                 birth_data_et.setText(birth_data_tv.getText());
@@ -172,7 +192,7 @@ public class MyInfoActivity extends AppCompatActivity {
                     }
                 });
 
-                // 회원 전화번호 정보
+                // 회원 전화번호 정보 텍스트 뷰를 에디트 뷰로 교체
                 phone_data_tv.setVisibility(View.GONE);
                 phone_data_et.setVisibility(View.VISIBLE);
                 phone_data_et.setText(phone_data_tv.getText());
@@ -185,6 +205,43 @@ public class MyInfoActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+                // 프로필 이미지 정보 레이아웃 교체
+                modify_ln3.setVisibility(View.GONE);
+                modify_ln4.setVisibility(View.VISIBLE);
+
+                // 프로필 이미지 클릭 시 이미지 변경 가능하게
+                profile_image_1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        popup_dialog.show();
+                        popup_dialog.findViewById(R.id.camera).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //TODO: 카메라 누르면 이벤트 발생
+                            }
+                        });
+                        popup_dialog.findViewById(R.id.gallery).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //TODO: 갤러리 누르면 이벤트 발생
+                            }
+                        });
+                        popup_dialog.findViewById(R.id.basic).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //TODO: 기본 누르면 이벤트 발생
+                            }
+                        });
+                        popup_dialog.findViewById(R.id.cancel_btn).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                popup_dialog.dismiss();
+                            }
+                        });
+                    }
+                });
+                checkDangerousPermissions();
             }
         });
 
@@ -192,17 +249,18 @@ public class MyInfoActivity extends AppCompatActivity {
         cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 레이아웃 교체
+                // 레이아웃 교체 : 버튼, 프로필 이미지
                 modify_ln1.setVisibility(View.VISIBLE);
                 modify_ln2.setVisibility(View.GONE);
+                modify_ln3.setVisibility(View.VISIBLE);
+                modify_ln4.setVisibility(View.GONE);
 
                 // 회원 이름 정보
                 member_name_data_tv.setVisibility(View.VISIBLE);
                 member_name_data_et.setVisibility(View.GONE);
 
                 // 회원 성별 정보
-                gender_data_tv.setVisibility(View.VISIBLE);
-                gender_data_et.setVisibility(View.GONE);
+
 
                 // 회원 이메일 정보
                 email_data_tv.setVisibility(View.VISIBLE);
@@ -225,7 +283,8 @@ public class MyInfoActivity extends AppCompatActivity {
                 MemberVO vo = new MemberVO();
                 vo.setId(common.getLoginInfo().getId());
                 vo.setMember_name(member_name_data_et.getText().toString());
-                vo.setGender(gender_data_et.getText().toString());
+                Log.d("로그", "저장 버튼 클릭 시 modify_gender_info: "+modify_gender_info);
+                vo.setGender(modify_gender_info);
                 vo.setEmail(email_data_et.getText().toString());
                 vo.setBirth(birth_data_et.getText().toString());
                 vo.setPhone(phone_data_et.getText().toString());
@@ -242,4 +301,32 @@ public class MyInfoActivity extends AppCompatActivity {
             }
         });
     }//onCreate()
+
+    private void checkDangerousPermissions() {
+        String[] permissions = {
+                Manifest.permission.CAMERA,
+                Manifest.permission.ACCESS_MEDIA_LOCATION,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        };
+
+        int permissionCheck = PackageManager.PERMISSION_GRANTED;
+        for (int i = 0; i < permissions.length; i++) {
+            permissionCheck = ContextCompat.checkSelfPermission(this, permissions[i]);
+            if (permissionCheck == PackageManager.PERMISSION_DENIED) {
+                break;
+            }
+        }
+
+        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "권한 있음", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "권한 없음", Toast.LENGTH_LONG).show();
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[0])) {
+                Toast.makeText(this, "권한 설명 필요함.", Toast.LENGTH_LONG).show();
+            } else {
+                ActivityCompat.requestPermissions(this, permissions, 1);
+            }
+        }
+    }//checkDangerousPermissions()
 }
