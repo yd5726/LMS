@@ -1,16 +1,22 @@
 package com.and.middle;
+import java.net.http.HttpRequest;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import common.CommonService;
 import lms_board.BoardVO;
 import lms_enrolment.EnrolmentVO;
 import lms_member.MemberVO;
@@ -18,7 +24,7 @@ import lms_member.MemberVO;
 @RestController
 public class LMSController {
 	@Autowired @Qualifier("bteam") private SqlSession session;
-	
+	@Autowired CommonService common;
 	// Spring을 연 곳이 서버 _ 202호 컴퓨터 _ 192.168.0.122로 안드로이드 ip 설정
 	// http://192.168.0.122/smart/login.mj?id=user3&pw=000aA
 	// 로그인
@@ -114,9 +120,18 @@ public class LMSController {
 	
 	//나의 정보 수정
 	@RequestMapping(value = "/modify_my_info.mj", produces ="text/html;charset=utf-8")
-	public String modify_my_info(String member) {
-		
-		MemberVO modify_member = new Gson().fromJson(member, MemberVO.class);
+	public String modify_my_info(String param, HttpServletRequest reqest) {
+		MemberVO modify_member = new Gson().fromJson(param, MemberVO.class);
+		MultipartRequest mReq = (MultipartRequest) reqest;
+		MultipartFile file = mReq.getFile("file");
+		String imgPath = null;
+		if(file !=null) {
+			System.out.println(file.getOriginalFilename());
+			System.out.println(file.getName());
+			imgPath = common.fileUpload("and", file, reqest);
+			modify_member.setProfilepath(imgPath);
+			System.out.println(imgPath);
+		}
 		int result = session.update("member.modify_my_info",modify_member);
 		
 		if(result > 0) {
