@@ -30,6 +30,7 @@
                 android:layout_height="wrap_content">
                 <ImageView
                     android:id="@+id/profile_image_0"
+                    android:scaleType="fitXY"
                     android:src="@drawable/lms_logo"
                     android:layout_width="100dp"
                     android:layout_height="100dp"/>
@@ -51,6 +52,7 @@
                 android:layout_height="wrap_content">
                 <ImageView
                     android:id="@+id/profile_image_1"
+                    android:scaleType="fitXY"
                     android:src="@drawable/ic_launcher_foreground"
                     android:layout_width="100dp"
                     android:layout_height="100dp"/>

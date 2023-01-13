@@ -119,7 +119,6 @@ public class CommonMethod {
         ApiInterface apiInterface = new ApiClient().getApiClient().create(ApiInterface.class);
         Call<String> apiTest = apiInterface.connFilePost(url, stringToRequest(), pathToPartFile(filePath));
 
-
         apiTest.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {

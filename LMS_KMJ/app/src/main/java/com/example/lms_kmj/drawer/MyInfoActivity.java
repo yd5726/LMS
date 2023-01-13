@@ -1,18 +1,25 @@
 package com.example.lms_kmj.drawer;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -23,12 +30,16 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.conn.CommonMethod;
 import com.example.lms_kmj.LoginActivity;
 import com.example.lms_kmj.R;
 import com.example.lms_kmj.common.Common;
 import com.example.lms_kmj.member.MemberVO;
 import com.google.gson.Gson;
+
+import java.io.File;
+import java.io.IOException;
 
 public class MyInfoActivity extends AppCompatActivity {
     Toolbar top_toolbar;
@@ -40,8 +51,12 @@ public class MyInfoActivity extends AppCompatActivity {
     RadioGroup radioGroup;
     RadioButton male_rd, female_rd;
     String modify_gender_info ="남";
+
     ImageView profile_image_0,profile_image_1;
     Dialog popup_dialog;
+    String img_path;
+    public final int CAMERA_CODE = 1000;
+    public final int GALLERY_CODE = 1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -219,18 +234,23 @@ public class MyInfoActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 //TODO: 카메라 누르면 이벤트 발생
+                                cameraMethod();
+                                popup_dialog.dismiss();
                             }
                         });
                         popup_dialog.findViewById(R.id.gallery).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 //TODO: 갤러리 누르면 이벤트 발생
+                                galleryMethod();
+                                popup_dialog.dismiss();
                             }
                         });
                         popup_dialog.findViewById(R.id.basic).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 //TODO: 기본 누르면 이벤트 발생
+                                popup_dialog.dismiss();
                             }
                         });
                         popup_dialog.findViewById(R.id.cancel_btn).setOnClickListener(new View.OnClickListener() {
@@ -280,24 +300,46 @@ public class MyInfoActivity extends AppCompatActivity {
         confirm_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MemberVO vo = new MemberVO();
+                /*MemberVO vo = new MemberVO();
                 vo.setId(common.getLoginInfo().getId());
                 vo.setMember_name(member_name_data_et.getText().toString());
-                Log.d("로그", "저장 버튼 클릭 시 modify_gender_info: "+modify_gender_info);
                 vo.setGender(modify_gender_info);
                 vo.setEmail(email_data_et.getText().toString());
                 vo.setBirth(birth_data_et.getText().toString());
-                vo.setPhone(phone_data_et.getText().toString());
-
-                new CommonMethod().setParams("member", new Gson().toJson(vo))
+                vo.setPhone(phone_data_et.getText().toString());*/
+                /*
+                new CommonMethod().setParams("param", new Gson().toJson(vo))
                     .sendPost("modify_my_info.mj", new CommonMethod.CallBackResult() {
                         @Override
                         public void result(boolean isResult, String data) {
-                            Toast.makeText(MyInfoActivity.this, "회원정보수정 완료! 다시 로그인해주세요.", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(MyInfoActivity.this, LoginActivity.class);
-                            startActivity(intent);
+                            if(isResult) {
+                                Toast.makeText(MyInfoActivity.this, "회원정보수정 완료! 다시 로그인해주세요.", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(MyInfoActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                            }
                         }
-                    });
+                    });*/
+                new CommonMethod().sendPostFile("modify_my_info.mj", img_path, new CommonMethod.CallBackResult() {
+                    @Override
+                    public void result(boolean isResult, String data) {
+                        MemberVO vo = new MemberVO();
+                        vo.setId(common.getLoginInfo().getId());
+                        vo.setMember_name(member_name_data_et.getText().toString());
+                        vo.setGender(modify_gender_info);
+                        vo.setEmail(email_data_et.getText().toString());
+                        vo.setBirth(birth_data_et.getText().toString());
+                        vo.setPhone(phone_data_et.getText().toString());
+                        vo.setProfilepath(img_path);
+                        Log.d("로그", "img_path: "+img_path);
+                        new CommonMethod().setParams("param",vo).sendPostFile("modify_my_info.mj",img_path,(isResult1, data1) -> {
+                            if(isResult1) {
+                                Toast.makeText(MyInfoActivity.this, "회원정보수정 완료! 다시 로그인해주세요.", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(MyInfoActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                });
             }
         });
     }//onCreate()
@@ -329,4 +371,58 @@ public class MyInfoActivity extends AppCompatActivity {
             }
         }
     }//checkDangerousPermissions()
+
+    public void galleryMethod(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_PICK);
+        startActivityForResult(Intent.createChooser(intent,"select picture"), GALLERY_CODE);
+    }//galleryMethod()
+
+    public void cameraMethod(){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        File file = new CommonMethod().createFile(this); // 임시 파일 만들어오기 <- 프로바이더사용시 필요함
+        img_path = file.getAbsolutePath();
+
+        if(file != null){
+            Uri imgUri = FileProvider.getUriForFile(this,getPackageName()+".fileprovider",file);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){ // API 24부터 Provider 를 이용하게 바뀜
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
+            }else{
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file)); // API 24 이전에는 파일 만든 것만 보내면 됐음
+            }
+        }
+        //startActivity(intent); ==X 결과를 받아와야할떄는 startActivityForResult
+        // startActivityForResult로 액티비티가 실행이되고 종료가되면 하나의 메소드인 onActivityResult가 결과를
+        //다받게됨. => 이때 어떤 액티비티가 종료 되었는지 구분하기위한 코드== RequestCode
+        startActivityForResult(intent,CAMERA_CODE);
+    }//cameraMethod()
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == 1){
+            for (int i = 0 ; i< permissions.length ; i++){
+                if ( grantResults[i] == PackageManager.PERMISSION_GRANTED){
+                    Log.d("로그", "권한 승인 됨: " + permissions[i]);
+                }else{
+                    Log.d("로그", "권한 승인 안됨: " + permissions[i]);
+                }
+            }
+        }
+    }//onRequestPermissionsResult()
+
+    // 선택된 이미지 가져오기
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == CAMERA_CODE && resultCode == RESULT_OK){
+            Glide.with(getApplicationContext()).load(data.getData()).override(100,100).into(profile_image_1);
+        }
+        else if(requestCode == GALLERY_CODE && resultCode == RESULT_OK){
+            Glide.with(getApplicationContext()).load(data.getData()).override(100,100).into(profile_image_1);
+            img_path = data.getData().toString();
+        }
+    }//onActivityResult()
 }
