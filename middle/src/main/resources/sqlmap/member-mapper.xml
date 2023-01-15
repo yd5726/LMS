@@ -26,7 +26,8 @@ select count(*) from member where id = #{id}
 <select id='my_info' resultType="lms_member.MemberVO">
 select member_code,id,pw,member_name,gender,email
 ,birth
-,phone,type 
+,phone,type
+, profilepath 
 from member where id =#{id}	
 </select>
 
