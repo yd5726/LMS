@@ -33,13 +33,6 @@ from member where id =#{id}
 
 <!-- 나의 정보 수정 -->
 <update id ="modify_my_info">
-<!-- update member 
-set member_name = #{member_name}
-, gender = #{gender}
-, email = #{email}
-, birth = #{birth}
-, phone = #{phone}
-where id = #{id} -->
 update member 
 set member_name = #{member_name}
 , gender = #{gender}
