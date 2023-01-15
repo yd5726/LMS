@@ -135,8 +135,8 @@ public class JoinActivity extends AppCompatActivity {
                     vo.setEmail(email_et.getText()+"");
                     vo.setBirth(birth_et.getText()+"");
                     vo.setPhone(phone_et.getText()+"");
-                    new CommonMethod().setParams("member", new Gson().toJson(vo)).
-                            sendPost("join.mj", new CommonMethod.CallBackResult() {
+                    new CommonMethod().setParams("member", new Gson().toJson(vo))
+                            .sendPost("join.mj", new CommonMethod.CallBackResult() {
                                 @Override
                                 public void result(boolean isResult, String data) {
                                     Log.d("로그", "회원가입 확인버튼 누름 data 출력 : " + data);

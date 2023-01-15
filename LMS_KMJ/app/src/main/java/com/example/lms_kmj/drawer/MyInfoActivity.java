@@ -313,8 +313,11 @@ public class MyInfoActivity extends AppCompatActivity {
                         vo.setEmail(email_data_et.getText().toString());
                         vo.setBirth(birth_data_et.getText().toString());
                         vo.setPhone(phone_data_et.getText().toString());
-                        vo.setProfilepath(img_path);
-                        Log.d("로그", "img_path: "+img_path);
+                        if(img_path == null){
+                            vo.setProfilepath(common.getLoginInfo().getProfilepath());
+                        }else {
+                            vo.setProfilepath(img_path);
+                        }
                         new CommonMethod().setParams("param",vo).sendPostFile("modify_my_info.mj",img_path,(isResult1, data1) -> {
                             if(isResult1) {
                                 Toast.makeText(MyInfoActivity.this, "회원정보수정 완료! 다시 로그인해주세요.", Toast.LENGTH_SHORT).show();
