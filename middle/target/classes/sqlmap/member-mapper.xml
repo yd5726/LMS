@@ -11,7 +11,7 @@ where id = #{id} and pw = #{pw}
 <insert id='join'>
 insert into member(member_code,id,pw,member_name,gender
 ,email,birth,phone,type)
-values ( SEQ_MEMBER.nextval,#{id},#{pw},#{member_name, jdbcType=VARCHAR}
+values ( SEQ_MEMBER.nextval,#{id},#{pw},#{member_name}
 ,#{gender},#{email, jdbcType=VARCHAR},#{birth, jdbcType=VARCHAR}
 ,#{phone, jdbcType=VARCHAR},#{type})	
 </insert>
@@ -36,10 +36,10 @@ from member where id =#{id}
 update member 
 set member_name = #{member_name}
 , gender = #{gender}
-, email = #{email}
-, birth = #{birth}
-, phone = #{phone}
-, profilepath = #{profilepath}
+, email = #{email, jdbcType=VARCHAR}
+, birth = #{birth, jdbcType=VARCHAR}
+, phone = #{phone, jdbcType=VARCHAR}
+, profilepath = #{profilepath, jdbcType=VARCHAR}
 where id = #{id}
 </update>
 </mapper>

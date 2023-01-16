@@ -1,5 +1,4 @@
 package com.and.middle;
-import java.net.http.HttpRequest;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class LMSController {
 	// http://192.168.0.122/smart/login.mj?id=user3&pw=000aA
 	// 로그인
 	@RequestMapping(value = "/login.mj", produces ="text/html;charset=UTF-8")
-	public String login1(String id, String pw) {
+	public String login(String id, String pw) {
 		HashMap<String,String> map = new HashMap<String, String>();
 		map.put("id", id);
 		map.put("pw", pw);
