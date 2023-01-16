@@ -9,6 +9,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,7 +21,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,6 +34,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.conn.CommonMethod;
+import com.example.lms_kmj.JoinActivity;
 import com.example.lms_kmj.LoginActivity;
 import com.example.lms_kmj.R;
 import com.example.lms_kmj.common.Common;
@@ -37,6 +42,10 @@ import com.example.lms_kmj.member.MemberVO;
 import com.google.gson.Gson;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.regex.Pattern;
 
 public class MyInfoActivity extends AppCompatActivity {
     Toolbar top_toolbar;
@@ -54,6 +63,19 @@ public class MyInfoActivity extends AppCompatActivity {
     String img_path;
     public final int CAMERA_CODE = 1000;
     public final int GALLERY_CODE = 1001;
+
+    Calendar myCalendar = Calendar.getInstance();
+    DatePickerDialog.OnDateSetListener setDate = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, month);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateDate();
+        }
+    };
+
+    Pattern emailPatttern = Patterns.EMAIL_ADDRESS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,40 +244,34 @@ public class MyInfoActivity extends AppCompatActivity {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
                         if(hasFocus){
-                            email_data_et.setText("");
-                            email_data_et.setHint(email_data_tv.getText());
+                            if(! email_data_et.getText().toString().isEmpty()){
+                                email_data_et.setText("");
+                                email_data_et.setHint(email_data_tv.getText());
+                                if(!emailPatttern.matcher(email_data_et.getText().toString()).matches()){
+                                    Toast.makeText(MyInfoActivity.this, "이메일형식이 올바르지 않습니다.", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                            }
                         }
                     }
                 });
 
-                // 회원 생일 정보 텍스트 뷰를 에디트 뷰로 교체
+                // 회원 생일 정보 텍스트 뷰를 DatePickerDialog 로 교체
                 birth_data_tv.setVisibility(View.GONE);
                 birth_data_et.setVisibility(View.VISIBLE);
-                //birth_data_et.setHint(birth_data_tv.getText());
-                birth_data_et.setHint("yyyy-MM-dd");
+                if(birth_data_et.getText() == null){
+                    birth_data_et.setHint("yyyy-MM-dd");
+                }else{
+                    birth_data_et.setHint(birth_data_tv.getText());
+                }
+
                 birth_data_et.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        Toast.makeText(MyInfoActivity.this, "생일 정보 변경", Toast.LENGTH_SHORT).show();
+                    public void onClick(View view) {
+                        new DatePickerDialog(MyInfoActivity.this,
+                                setDate, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
                     }
                 });
-                /*
-                birth_data_et.setText(birth_data_tv.getText());
-                birth_data_et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if(hasFocus){
-                            birth_data_et.setText("");
-                            birth_data_et.setHint(birth_data_tv.getText());
-                            birth_data_et.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Toast.makeText(MyInfoActivity.this, "생일 정보 변경", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    }
-                });*/
 
                 // 회원 전화번호 정보 텍스트 뷰를 에디트 뷰로 교체
                 phone_data_tv.setVisibility(View.GONE);
@@ -320,9 +336,6 @@ public class MyInfoActivity extends AppCompatActivity {
                 member_name_data_tv.setVisibility(View.VISIBLE);
                 member_name_data_et.setVisibility(View.GONE);
 
-                // 회원 성별 정보
-
-
                 // 회원 이메일 정보
                 email_data_tv.setVisibility(View.VISIBLE);
                 email_data_et.setVisibility(View.GONE);
@@ -352,7 +365,12 @@ public class MyInfoActivity extends AppCompatActivity {
                         if(email_data_et.getText().toString().equals("정보가 없습니다.")){
                             vo.setEmail("");
                         }else{
-                            vo.setEmail(email_data_et.getText().toString());
+                            if(!emailPatttern.matcher(email_data_et.getText().toString()).matches()){
+                                Toast.makeText(MyInfoActivity.this, "이메일형식이 올바르지 않습니다.", Toast.LENGTH_SHORT).show();
+                                return;
+                            }else{
+                                vo.setEmail(email_data_et.getText().toString());
+                            }
                         }
                         if(birth_data_et.getText().toString().equals("정보가 없습니다.")){
                             vo.setBirth("");
@@ -365,11 +383,6 @@ public class MyInfoActivity extends AppCompatActivity {
                             vo.setPhone(phone_data_et.getText().toString());
                         }
 
-                        /*
-                            vo.setEmail(email_data_et.getText().toString());
-                            vo.setBirth(birth_data_et.getText().toString());
-                            vo.setPhone(phone_data_et.getText().toString());
-                        */
                         if(img_path == null){
                             vo.setProfilepath(common.getLoginInfo().getProfilepath());
                         }else {
@@ -465,4 +478,12 @@ public class MyInfoActivity extends AppCompatActivity {
             Glide.with(this).load(img_path).into(profile_image_1);
         }
     }//onActivityResult()
+    public void updateDate(){
+        String format = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            simpleDateFormat = new SimpleDateFormat(format, Locale.KOREA);
+        }
+        birth_data_et.setText(simpleDateFormat.format(myCalendar.getTime()));
+    }//updateDate()
 }

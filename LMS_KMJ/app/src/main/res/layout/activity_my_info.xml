@@ -305,17 +305,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="visible"/>
-            <!--<EditText
-                style="@style/TEXT_STYLE_4"
-                android:id="@+id/birth_data_et"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:paddingLeft="10dp"
-                android:background="@drawable/edittext_rounded_corner_rectangle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>-->
             <EditText
                 style="@style/TEXT_STYLE_4"
                 android:id="@+id/birth_data_et"
