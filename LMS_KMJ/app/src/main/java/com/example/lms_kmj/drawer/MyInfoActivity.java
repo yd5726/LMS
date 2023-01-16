@@ -158,45 +158,50 @@ public class MyInfoActivity extends AppCompatActivity {
                         female_rd.setTextColor(Color.parseColor("#000000"));
                         female_rd.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#FF5D82")));
                     }
-
-                    // null 일 수 있는 정보 : 이메일, 생년월일, 전화번호 => 2^3
-                    if(my_info.getEmail() != null && my_info.getBirth() != null && my_info.getPhone() != null){
-                        email_data_tv.setText(my_info.getEmail());
-                        String bitrh_str = my_info.getBirth();
-                        birth_data_tv.setText(bitrh_str.substring(0,10));
-                        phone_data_tv.setText(my_info.getPhone());
-                    } else if(my_info.getEmail() != null && my_info.getBirth() == null && my_info.getPhone() != null){
-                        email_data_tv.setText(my_info.getEmail());
-                        birth_data_tv.setText("정보가 없습니다.");
-                        phone_data_tv.setText(my_info.getPhone());
-                    } else if(my_info.getEmail() != null && my_info.getBirth() != null && my_info.getPhone() == null){
-                        email_data_tv.setText(my_info.getEmail());
-                        String bitrh_str = my_info.getBirth();
-                        birth_data_tv.setText(bitrh_str.substring(0,10));
-                        phone_data_tv.setText("정보가 없습니다.");
-                    } else if(my_info.getEmail() == null && my_info.getBirth() != null && my_info.getPhone() != null){
-                        email_data_tv.setText("정보가 없습니다.");
-                        String bitrh_str = my_info.getBirth();
-                        birth_data_tv.setText(bitrh_str.substring(0,10));
-                        phone_data_tv.setText(my_info.getPhone());
-                    } else if(my_info.getEmail() == null && my_info.getBirth() == null && my_info.getPhone() != null){
-                        email_data_tv.setText("정보가 없습니다.");
-                        birth_data_tv.setText("정보가 없습니다.");
-                        phone_data_tv.setText(my_info.getPhone());
-                    } else if(my_info.getEmail() == null && my_info.getBirth() != null && my_info.getPhone() == null){
-                        email_data_tv.setText("정보가 없습니다.");
-                        String bitrh_str = my_info.getBirth();
-                        birth_data_tv.setText(bitrh_str.substring(0,10));
-                        phone_data_tv.setText("정보가 없습니다.");
-                    } else if(my_info.getEmail() != null && my_info.getBirth() == null && my_info.getPhone() == null){
-                        email_data_tv.setText(my_info.getEmail());
-                        birth_data_tv.setText("정보가 없습니다.");
-                        phone_data_tv.setText("정보가 없습니다.");
-                    } else {
-                        email_data_tv.setText("정보가 없습니다.");
-                        birth_data_tv.setText("정보가 없습니다.");
-                        phone_data_tv.setText("정보가 없습니다.");
+                    
+                    isNullTextView(my_info.getEmail() , email_data_tv);
+                    isNullTextView(my_info.getPhone() , phone_data_tv);
+                    if(my_info.getBirth()!= null && my_info.getBirth().trim().length() > 1 ){
+                        isNullTextView(my_info.getBirth().substring(0,10) , birth_data_tv);
                     }
+                    // null 일 수 있는 정보 : 이메일, 생년월일, 전화번호 => 2^3
+//                    if(my_info.getEmail() != null && my_info.getBirth() != null && my_info.getPhone() != null){
+//                        email_data_tv.setText(my_info.getEmail());
+//                        String bitrh_str = my_info.getBirth();
+//                        birth_data_tv.setText(bitrh_str.substring(0,10));
+//                        phone_data_tv.setText(my_info.getPhone());
+//                    } else if(my_info.getEmail() != null && my_info.getBirth() == null && my_info.getPhone() != null){
+//                        email_data_tv.setText(my_info.getEmail());
+//                        birth_data_tv.setText("정보가 없습니다.");
+//                        phone_data_tv.setText(my_info.getPhone());
+//                    } else if(my_info.getEmail() != null && my_info.getBirth() != null && my_info.getPhone() == null){
+//                        email_data_tv.setText(my_info.getEmail());
+//                        String bitrh_str = my_info.getBirth();
+//                        birth_data_tv.setText(bitrh_str.substring(0,10));
+//                        phone_data_tv.setText("정보가 없습니다.");
+//                    } else if(my_info.getEmail() == null && my_info.getBirth() != null && my_info.getPhone() != null){
+//                        email_data_tv.setText("정보가 없습니다.");
+//                        String bitrh_str = my_info.getBirth();
+//                        birth_data_tv.setText(bitrh_str.substring(0,10));
+//                        phone_data_tv.setText(my_info.getPhone());
+//                    } else if(my_info.getEmail() == null && my_info.getBirth() == null && my_info.getPhone() != null){
+//                        email_data_tv.setText("정보가 없습니다.");
+//                        birth_data_tv.setText("정보가 없습니다.");
+//                        phone_data_tv.setText(my_info.getPhone());
+//                    } else if(my_info.getEmail() == null && my_info.getBirth() != null && my_info.getPhone() == null){
+//                        email_data_tv.setText("정보가 없습니다.");
+//                        String bitrh_str = my_info.getBirth();
+//                        birth_data_tv.setText(bitrh_str.substring(0,10));
+//                        phone_data_tv.setText("정보가 없습니다.");
+//                    } else if(my_info.getEmail() != null && my_info.getBirth() == null && my_info.getPhone() == null){
+//                        email_data_tv.setText(my_info.getEmail());
+//                        birth_data_tv.setText("정보가 없습니다.");
+//                        phone_data_tv.setText("정보가 없습니다.");
+//                    } else {
+//                        email_data_tv.setText("정보가 없습니다.");
+//                        birth_data_tv.setText("정보가 없습니다.");
+//                        phone_data_tv.setText("정보가 없습니다.");
+//                    }
                     type_data.setText(my_info.getType());
                 }
             });
@@ -262,7 +267,7 @@ public class MyInfoActivity extends AppCompatActivity {
                 if(birth_data_et.getText() == null){
                     birth_data_et.setHint("yyyy-MM-dd");
                 }else{
-                    birth_data_et.setHint(birth_data_tv.getText());
+                    birth_data_et.setText(birth_data_tv.getText());
                 }
 
                 birth_data_et.setOnClickListener(new View.OnClickListener() {
@@ -486,4 +491,15 @@ public class MyInfoActivity extends AppCompatActivity {
         }
         birth_data_et.setText(simpleDateFormat.format(myCalendar.getTime()));
     }//updateDate()
+
+    public void isNullTextView(String value , TextView textView){
+        if(value == null || value.trim().length() < 1){
+            textView.setText("정보가 없습니다.");
+        }else{
+            textView.setText(value);
+        }
+
+    }
+
+
 }
