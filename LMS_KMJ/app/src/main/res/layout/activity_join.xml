@@ -12,7 +12,7 @@
     <!--회원가입 입력 폼-->
     <RadioGroup
         android:id="@+id/radioGroup1"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
@@ -63,8 +63,6 @@
     </LinearLayout>
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:counterEnabled="true"
-        app:counterMaxLength="10"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_width="match_parent"
@@ -72,6 +70,19 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/pw_et"
             android:hint="비밀번호"
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/pw_ck_et"
+            android:hint="비밀번호 확인"
             android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

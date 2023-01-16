@@ -13,8 +13,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -115,37 +113,71 @@ public class MyInfoActivity extends AppCompatActivity {
 
         // 회원 정보 불러오기
         new CommonMethod().setParams("id",common.getLoginInfo().getId())
-                .sendPost("my_info.mj", new CommonMethod.CallBackResult() {
-                    @Override
-                    public void result(boolean isResult, String data) {
-                        MemberVO my_info = new Gson().fromJson(data, MemberVO.class);
+            .sendPost("my_info.mj", new CommonMethod.CallBackResult() {
+                @Override
+                public void result(boolean isResult, String data) {
+                    MemberVO my_info = new Gson().fromJson(data, MemberVO.class);
 
-                        // 저장된 프로필 이미지 붙이기
-                        Glide.with(MyInfoActivity.this).load(my_info.getProfilepath()).into(profile_image_0);
+                    // 저장된 프로필 이미지 붙이기
+                    Glide.with(MyInfoActivity.this).load(my_info.getProfilepath()).into(profile_image_0);
 
-                        member_code_data.setText(my_info.getMember_code());
-                        id_data.setText(my_info.getId());
-                        pw_data.setText(my_info.getPw());
+                    member_code_data.setText(my_info.getMember_code());
+                    id_data.setText(my_info.getId());
+                    pw_data.setText(my_info.getPw());
 
-                        member_name_data_tv.setText(my_info.getMember_name());
+                    member_name_data_tv.setText(my_info.getMember_name());
 
-                        if(my_info.getGender().equals("남")){
-                            male_rd.setChecked(true);
-                            male_rd.setTextColor(Color.parseColor("#000000"));
-                            male_rd.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#47628D")));
-                        }else{
-                            female_rd.setChecked(true);
-                            female_rd.setTextColor(Color.parseColor("#000000"));
-                            female_rd.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#FF5D82")));
-                        }
+                    if(my_info.getGender().equals("남")){
+                        male_rd.setChecked(true);
+                        male_rd.setTextColor(Color.parseColor("#000000"));
+                        male_rd.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#47628D")));
+                    }else{
+                        female_rd.setChecked(true);
+                        female_rd.setTextColor(Color.parseColor("#000000"));
+                        female_rd.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#FF5D82")));
+                    }
+
+                    // null 일 수 있는 정보 : 이메일, 생년월일, 전화번호 => 2^3
+                    if(my_info.getEmail() != null && my_info.getBirth() != null && my_info.getPhone() != null){
                         email_data_tv.setText(my_info.getEmail());
                         String bitrh_str = my_info.getBirth();
                         birth_data_tv.setText(bitrh_str.substring(0,10));
-
                         phone_data_tv.setText(my_info.getPhone());
-                        type_data.setText(my_info.getType());
+                    } else if(my_info.getEmail() != null && my_info.getBirth() == null && my_info.getPhone() != null){
+                        email_data_tv.setText(my_info.getEmail());
+                        birth_data_tv.setText("정보가 없습니다.");
+                        phone_data_tv.setText(my_info.getPhone());
+                    } else if(my_info.getEmail() != null && my_info.getBirth() != null && my_info.getPhone() == null){
+                        email_data_tv.setText(my_info.getEmail());
+                        String bitrh_str = my_info.getBirth();
+                        birth_data_tv.setText(bitrh_str.substring(0,10));
+                        phone_data_tv.setText("정보가 없습니다.");
+                    } else if(my_info.getEmail() == null && my_info.getBirth() != null && my_info.getPhone() != null){
+                        email_data_tv.setText("정보가 없습니다.");
+                        String bitrh_str = my_info.getBirth();
+                        birth_data_tv.setText(bitrh_str.substring(0,10));
+                        phone_data_tv.setText(my_info.getPhone());
+                    } else if(my_info.getEmail() == null && my_info.getBirth() == null && my_info.getPhone() != null){
+                        email_data_tv.setText("정보가 없습니다.");
+                        birth_data_tv.setText("정보가 없습니다.");
+                        phone_data_tv.setText(my_info.getPhone());
+                    } else if(my_info.getEmail() == null && my_info.getBirth() != null && my_info.getPhone() == null){
+                        email_data_tv.setText("정보가 없습니다.");
+                        String bitrh_str = my_info.getBirth();
+                        birth_data_tv.setText(bitrh_str.substring(0,10));
+                        phone_data_tv.setText("정보가 없습니다.");
+                    } else if(my_info.getEmail() != null && my_info.getBirth() == null && my_info.getPhone() == null){
+                        email_data_tv.setText(my_info.getEmail());
+                        birth_data_tv.setText("정보가 없습니다.");
+                        phone_data_tv.setText("정보가 없습니다.");
+                    } else {
+                        email_data_tv.setText("정보가 없습니다.");
+                        birth_data_tv.setText("정보가 없습니다.");
+                        phone_data_tv.setText("정보가 없습니다.");
                     }
-                });
+                    type_data.setText(my_info.getType());
+                }
+            });
 
         // 수정 버튼
         modify_btn.setOnClickListener(new View.OnClickListener() {
@@ -199,6 +231,15 @@ public class MyInfoActivity extends AppCompatActivity {
                 // 회원 생일 정보 텍스트 뷰를 에디트 뷰로 교체
                 birth_data_tv.setVisibility(View.GONE);
                 birth_data_et.setVisibility(View.VISIBLE);
+                //birth_data_et.setHint(birth_data_tv.getText());
+                birth_data_et.setHint("yyyy-MM-dd");
+                birth_data_et.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MyInfoActivity.this, "생일 정보 변경", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                /*
                 birth_data_et.setText(birth_data_tv.getText());
                 birth_data_et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
@@ -206,9 +247,15 @@ public class MyInfoActivity extends AppCompatActivity {
                         if(hasFocus){
                             birth_data_et.setText("");
                             birth_data_et.setHint(birth_data_tv.getText());
+                            birth_data_et.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Toast.makeText(MyInfoActivity.this, "생일 정보 변경", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
                     }
-                });
+                });*/
 
                 // 회원 전화번호 정보 텍스트 뷰를 에디트 뷰로 교체
                 phone_data_tv.setVisibility(View.GONE);
@@ -236,7 +283,6 @@ public class MyInfoActivity extends AppCompatActivity {
                         popup_dialog.findViewById(R.id.camera).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //TODO: 카메라 누르면 이벤트 발생
                                 cameraMethod();
                                 popup_dialog.dismiss();
                             }
@@ -244,15 +290,7 @@ public class MyInfoActivity extends AppCompatActivity {
                         popup_dialog.findViewById(R.id.gallery).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //TODO: 갤러리 누르면 이벤트 발생
                                 galleryMethod();
-                                popup_dialog.dismiss();
-                            }
-                        });
-                        popup_dialog.findViewById(R.id.basic).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                //TODO: 기본 누르면 이벤트 발생
                                 popup_dialog.dismiss();
                             }
                         });
@@ -310,9 +348,28 @@ public class MyInfoActivity extends AppCompatActivity {
                         vo.setId(common.getLoginInfo().getId());
                         vo.setMember_name(member_name_data_et.getText().toString());
                         vo.setGender(modify_gender_info);
-                        vo.setEmail(email_data_et.getText().toString());
-                        vo.setBirth(birth_data_et.getText().toString());
-                        vo.setPhone(phone_data_et.getText().toString());
+
+                        if(email_data_et.getText().toString().equals("정보가 없습니다.")){
+                            vo.setEmail("");
+                        }else{
+                            vo.setEmail(email_data_et.getText().toString());
+                        }
+                        if(birth_data_et.getText().toString().equals("정보가 없습니다.")){
+                            vo.setBirth("");
+                        }else{
+                            vo.setBirth(birth_data_et.getText().toString());
+                        }
+                        if(phone_data_et.getText().toString().equals("정보가 없습니다.")){
+                            vo.setPhone("");
+                        }else{
+                            vo.setPhone(phone_data_et.getText().toString());
+                        }
+
+                        /*
+                            vo.setEmail(email_data_et.getText().toString());
+                            vo.setBirth(birth_data_et.getText().toString());
+                            vo.setPhone(phone_data_et.getText().toString());
+                        */
                         if(img_path == null){
                             vo.setProfilepath(common.getLoginInfo().getProfilepath());
                         }else {

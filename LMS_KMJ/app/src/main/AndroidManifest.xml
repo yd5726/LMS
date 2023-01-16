@@ -40,9 +40,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/hamham"
+        android:icon="@mipmap/icon8_tree"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/hamham_round"
+        android:roundIcon="@mipmap/icon8_tree_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LMS_KMJ"
         android:usesCleartextTraffic="true"
@@ -94,7 +94,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

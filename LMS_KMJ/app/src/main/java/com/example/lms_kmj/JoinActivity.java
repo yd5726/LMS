@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.RadioButton;
@@ -25,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 public class JoinActivity extends AppCompatActivity {
     Calendar myCalendar = Calendar.getInstance();
@@ -37,13 +39,14 @@ public class JoinActivity extends AppCompatActivity {
             updateDate();
         }
     };
-    TextInputEditText id_et, pw_et, name_et, email_et, birth_et, phone_et;
+    TextInputEditText id_et, pw_et, pw_ck_et, name_et, email_et, birth_et, phone_et;
     Toolbar top_toolbar;
     RadioGroup radioGroup1,radioGroup2;
     TextView cancel_btn, confirm_btn, id_ck_tv;
     RadioButton stud_rd, teach_rd, male_rd, female_rd;
     String type_result ="STUD", gender_result="남";
     int id_ck_cnt = 0;
+    Pattern emailPatttern = Patterns.EMAIL_ADDRESS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,7 @@ public class JoinActivity extends AppCompatActivity {
         teach_rd = findViewById(R.id.teach_rd);
         id_et = findViewById(R.id.id_et);
         pw_et = findViewById(R.id.pw_et);
+        pw_ck_et = findViewById(R.id.pw_ck_et);
         name_et = findViewById(R.id.name_et);
         radioGroup2 = findViewById(R.id.radioGroup2);
         male_rd = findViewById(R.id.male_rd);
@@ -125,16 +129,50 @@ public class JoinActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("로그", "회원가입 확인버튼 누름 id_ck_cnt: " + id_ck_cnt);
+                // 아이디 입력 확인
+                if(id_et.getText().toString().isEmpty()){
+                    Toast.makeText(JoinActivity.this, "아이디를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // 입력한 비밀번호와 비밀번호 확인란 비교
+                if(pw_et.getText().toString().isEmpty() || pw_ck_et.getText().toString().isEmpty()) {
+                    Toast.makeText(JoinActivity.this, "비밀번호 또는 비밀번호 확인란를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }else{
+                    if(! pw_et.getText().toString().equals(pw_ck_et.getText().toString())){
+                        Toast.makeText(JoinActivity.this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+
+                // 이름 입력 확인
+                if(name_et.getText().toString().isEmpty()){
+                    Toast.makeText(JoinActivity.this, "이름을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // 이메일 형식 확인
+                if(! email_et.getText().toString().isEmpty()){
+                    if(!emailPatttern.matcher(email_et.getText().toString()).matches()){
+                        Toast.makeText(JoinActivity.this, "이메일형식이 올바르지 않습니다.", Toast.LENGTH_SHORT).show();
+                        email_et.requestFocus();
+                        return;
+                    }
+                }
+
+                // 아이디 중복 확인 후 데이터 전송
                 if(id_ck_cnt == 5){
                     MemberVO vo = new MemberVO();
                     vo.setType(type_result);
-                    vo.setId(id_et.getText()+"");
-                    vo.setPw(pw_et.getText()+"");
-                    vo.setMember_name(name_et.getText()+"");
+                    vo.setId(id_et.getText().toString());
+                    vo.setPw(pw_et.getText().toString());
+                    vo.setMember_name(name_et.getText().toString());
                     vo.setGender(gender_result);
-                    vo.setEmail(email_et.getText()+"");
-                    vo.setBirth(birth_et.getText()+"");
-                    vo.setPhone(phone_et.getText()+"");
+                    vo.setEmail(email_et.getText().toString());
+                    vo.setBirth(birth_et.getText().toString());
+                    vo.setPhone(phone_et.getText().toString());
+
                     new CommonMethod().setParams("member", new Gson().toJson(vo))
                             .sendPost("join.mj", new CommonMethod.CallBackResult() {
                                 @Override
