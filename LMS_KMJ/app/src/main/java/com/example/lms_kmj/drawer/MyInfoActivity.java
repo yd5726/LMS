@@ -158,11 +158,13 @@ public class MyInfoActivity extends AppCompatActivity {
                         female_rd.setTextColor(Color.parseColor("#000000"));
                         female_rd.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#FF5D82")));
                     }
-                    
+
                     isNullTextView(my_info.getEmail() , email_data_tv);
                     isNullTextView(my_info.getPhone() , phone_data_tv);
                     if(my_info.getBirth()!= null && my_info.getBirth().trim().length() > 1 ){
                         isNullTextView(my_info.getBirth().substring(0,10) , birth_data_tv);
+                    }else if(my_info.getBirth()== null){
+                        birth_data_tv.setText("정보가 없습니다.");
                     }
                     // null 일 수 있는 정보 : 이메일, 생년월일, 전화번호 => 2^3
 //                    if(my_info.getEmail() != null && my_info.getBirth() != null && my_info.getPhone() != null){

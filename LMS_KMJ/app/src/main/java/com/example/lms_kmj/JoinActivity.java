@@ -173,6 +173,7 @@ public class JoinActivity extends AppCompatActivity {
                     vo.setBirth(birth_et.getText().toString());
                     vo.setPhone(phone_et.getText().toString());
 
+
                     new CommonMethod().setParams("member", new Gson().toJson(vo))
                             .sendPost("join.mj", new CommonMethod.CallBackResult() {
                                 @Override
