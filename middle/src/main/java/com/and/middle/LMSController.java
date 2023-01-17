@@ -39,7 +39,10 @@ public class LMSController {
 			System.out.println("id:" + member.getId());
 			System.out.println("type:" + member.getType());
 			System.out.println("name:" + member.getMember_name());
-			System.out.println("email:" + member.getEmail());
+			System.out.println("===============null허용============");
+			System.out.println("생년월일:" + member.getBirth());
+			System.out.println("이메일:" + member.getEmail());
+			System.out.println("전화번호:" + member.getPhone());
 		}else {
 			System.out.println("==로그인 실패==");
 		}		
@@ -58,7 +61,10 @@ public class LMSController {
 			System.out.println("id:" + vo.getId());
 			System.out.println("type:" + vo.getType());
 			System.out.println("name:" + vo.getMember_name());
-			System.out.println("email:" + vo.getEmail());
+			System.out.println("===============null허용============");
+			System.out.println("생년월일:" + vo.getBirth());
+			System.out.println("이메일:" + vo.getEmail());
+			System.out.println("전화번호:" + vo.getPhone());
 		}else {
 			System.out.println("==회원가입 실패==");
 		}	
@@ -128,8 +134,13 @@ public class LMSController {
 			System.out.println(file.getOriginalFilename());
 			System.out.println(file.getName());
 			imgPath = common.fileUpload("and", file, reqest);
-			modify_member.setProfilepath(imgPath);
+			System.out.println("=======imgPath1=============");
 			System.out.println(imgPath);
+			if(imgPath != null) {
+				modify_member.setProfilepath(imgPath);
+				System.out.println("=======imgPath2=============");
+				System.out.println(imgPath);
+			}
 		}
 		int result = session.update("member.modify_my_info",modify_member);
 		
